@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "customizations",
+  "version": "1.0.0",
+
+  "name": "Customizations",
+  "description": "Customize EVERYTHING!",
+  "authors": [
+    "Furgl"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/customizations",
+    "issues": "https://github.com/Furgl/Customizations/issues",
+    "sources": "https://github.com/Furgl/Customizations"
+  },
+
+  "license": "The MIT License (MIT)",
+  "icon": "assets/customizations/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "furgl.customizations.Customizations"
+    ],
+    "modmenu": [
+        "furgl.customizations.config.Config"
+    ]
+  },
+  "mixins": [
+    "customizations.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
