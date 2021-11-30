@@ -9,7 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import furgl.customizations.config.selectors.SelectableType;
-import furgl.customizations.customizations.triggers.TriggerTypes;
+import furgl.customizations.config.selectors.Selectables;
 
 /**This has context that can be set/read/tested*/
 public abstract class ContextHolder {
@@ -44,7 +44,6 @@ public abstract class ContextHolder {
 		return false;
 	}
 
-	@Nullable
 	public <T extends Context> T getOrAddContext(T contextIn) {
 		T context = getContext(contextIn);
 		if (context != null)
@@ -82,7 +81,7 @@ public abstract class ContextHolder {
 
 	public SelectableType getType() {
 		if (this.type == null)
-			this.type = TriggerTypes.NONE;
+			this.type = Selectables.BLANK;
 		return this.type;
 	}
 

@@ -1,5 +1,6 @@
-package furgl.customizations.config;
+package furgl.customizations.config.elements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -7,7 +8,9 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.Customizations;
+import furgl.customizations.config.Config;
 import furgl.customizations.customizations.Customization;
+import furgl.customizations.customizations.context.Context;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.text.Text;
@@ -82,6 +85,11 @@ public abstract class ConfigElement {
 	 * @return if config should reload*/
 	public boolean checkForChanges() {
 		return false;
+	}
+	
+	/**Get contexts that are used in this element*/
+	public ArrayList<Context> getRelatedContexts() {
+		return Lists.newArrayList();
 	}
 
 }

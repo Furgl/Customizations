@@ -5,6 +5,8 @@ import java.util.Map.Entry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import furgl.customizations.config.selectors.SelectableType;
+import furgl.customizations.config.selectors.Selectables;
 import furgl.customizations.customizations.context.Context;
 import furgl.customizations.customizations.context.ContextHolder;
 import furgl.customizations.customizations.context.Contexts;
@@ -24,7 +26,7 @@ public class Trigger extends ContextHolder {
 				trigger = new Trigger(name);
 				// type
 				if (obj.has("Type"))
-					trigger.type = TriggerTypes.getTypeByID(obj.get("Type").getAsString());
+					trigger.type = (SelectableType) Selectables.getTypeByID(obj.get("Type").getAsString());
 				// context
 				for (Entry<String, JsonElement> entry : obj.entrySet())
 					if (!entry.getKey().equals("Name") && !entry.getKey().equals("Type")) {

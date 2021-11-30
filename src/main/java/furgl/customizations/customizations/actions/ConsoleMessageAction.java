@@ -1,12 +1,11 @@
 package furgl.customizations.customizations.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import furgl.customizations.Customizations;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.parts.ConsoleMessagePart;
 import furgl.customizations.config.selectors.SelectableType;
 import furgl.customizations.customizations.Customization;
@@ -19,12 +18,12 @@ import net.minecraft.item.Items;
 
 public class ConsoleMessageAction extends SelectableType {
 
-	protected ConsoleMessageAction() {
-		super(SelectableType.Type.ACTION, "consoleMessage", new ItemStack(Items.CHAIN_COMMAND_BLOCK));
+	public ConsoleMessageAction() {
+		super("actions.consoleMessage", new ItemStack(Items.CHAIN_COMMAND_BLOCK));
 	}
 
 	@Override
-	public void activate(ArrayList<Context> contexts, Context... eventContext) {
+	public void activate(Context... contexts) {
 		for (Context context : contexts)
 			if (context.equals(Contexts.CONSOLE_MESSAGE))
 				Customizations.LOGGER.info(((ConsoleMessageContext)context).message);

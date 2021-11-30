@@ -1,10 +1,11 @@
-package furgl.customizations.config;
+package furgl.customizations.config.elements;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import furgl.customizations.Customizations;
+import furgl.customizations.config.FileConfig;
 import furgl.customizations.impl.IClothConfigScreen;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -14,7 +15,7 @@ import net.minecraft.text.TranslatableText;
 
 public class ShowTipsElement extends ConfigElement {
 
-	protected ShowTipsElement() {
+	public ShowTipsElement() {
 		super("showTips", null);
 	}
 

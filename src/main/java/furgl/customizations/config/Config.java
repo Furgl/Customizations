@@ -7,6 +7,9 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
 import furgl.customizations.Customizations;
+import furgl.customizations.config.elements.ConfigElement;
+import furgl.customizations.config.elements.DebugModeElement;
+import furgl.customizations.config.elements.ShowTipsElement;
 import furgl.customizations.config.lists.CustomizationList;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -22,6 +25,7 @@ public class Config implements ModMenuApi {
 	public static final Formatting LIST_FORMATTING = Formatting.BLUE;
 	public static final Formatting SUB_CATEGORY_FORMATTING = Formatting.GREEN;
 	public static final Formatting SELECTOR_FORMATTING = Formatting.YELLOW;
+	public static final Formatting TIP_FORMATTING = Formatting.GOLD;
 	
 	public static Text categoryText;
 	public static ClothConfigScreen currentScreen;
@@ -51,6 +55,9 @@ public class Config implements ModMenuApi {
 			list.getSubCategories().forEach(subCategory -> category.addEntry(subCategory.getMainConfigEntry()));
 			// show tips
 			category.addEntry(new ShowTipsElement().getOrCreateMainConfigEntry(builder));
+			// debug mode
+			category.addEntry(new DebugModeElement().getOrCreateMainConfigEntry(builder));
+			// set current screen
 			Screen screen = builder.build();
 			if (screen instanceof ClothConfigScreen)
 				currentScreen = (ClothConfigScreen)screen;

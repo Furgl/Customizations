@@ -21,7 +21,7 @@ public class Customizations implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		FileConfig.init();
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> Customizations.server = server);
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> Customizations.server = server); 
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> Customizations.server = null);
 	}
 

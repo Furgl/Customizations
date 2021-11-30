@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.config.Config;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.customizations.Customization;
 import furgl.customizations.impl.IAbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -22,7 +22,6 @@ public abstract class SubCategory extends ConfigElement {
 
 	@Override
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
-		System.out.println("adding to config: "+this.getName().getString()+" ("+this.getClass().getSimpleName()+")"); // TODO remove
 		List<AbstractConfigListEntry> children = Lists.newArrayList();
 		this.getChildren().stream()
 		.map(element -> element.getOrCreateConfigEntries(builder))

@@ -15,7 +15,7 @@ import com.terraformersmc.modmenu.ModMenu;
 
 import furgl.customizations.Customizations;
 import furgl.customizations.config.Config;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.impl.IClothConfigScreen;
 import me.shedaniel.clothconfig2.api.AbstractConfigEntry;
 import me.shedaniel.clothconfig2.api.Expandable;

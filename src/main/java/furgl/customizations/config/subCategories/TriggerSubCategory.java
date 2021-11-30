@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.config.Config;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.selectors.TriggerSelector;
 import furgl.customizations.customizations.Customization;
 import furgl.customizations.customizations.triggers.Trigger;
@@ -27,7 +27,6 @@ public class TriggerSubCategory extends SubCategory {
 
 	@Override
 	public void updateName(String name) {
-		System.out.println("updating to: "+name); // TODO remove
 		super.updateName(name);
 		this.trigger.name = name;
 	}

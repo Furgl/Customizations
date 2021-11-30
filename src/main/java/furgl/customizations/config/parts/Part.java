@@ -1,10 +1,13 @@
 package furgl.customizations.config.parts;
 
+import java.util.ArrayList;
+
 import org.jetbrains.annotations.Nullable;
 
 import furgl.customizations.Customizations;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.customizations.Customization;
+import furgl.customizations.customizations.context.Context;
 import furgl.customizations.customizations.context.ContextHolder;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -18,14 +21,26 @@ public abstract class Part extends ConfigElement {
 		this.contextHolder = contextHolder;
 	}
 	
+	/**Get contexts that are used in this element*/
+	@Override
+	public abstract ArrayList<Context> getRelatedContexts();
+	
 	@Override
 	public Text getName() {
-		return new TranslatableText("config."+Customizations.MODID+".part."+this.getId()+".name");
+		return getName(null);
 	}
-
+	
+	public Text getName(@Nullable String str) {
+		return new TranslatableText("config."+Customizations.MODID+".part."+this.getId()+(str == null ? "" : "."+str)+".name");
+	}
+	
 	@Override
 	public Text getTooltip() {
-		return new TranslatableText("config."+Customizations.MODID+".part."+this.getId()+".tooltip");
+		return getTooltip(null);
+	}
+	
+	public Text getTooltip(@Nullable String str) {
+		return new TranslatableText("config."+Customizations.MODID+".part."+this.getId()+(str == null ? "" : "."+str)+".tooltip");
 	}
 
 }

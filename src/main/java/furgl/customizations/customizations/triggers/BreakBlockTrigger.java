@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.selectors.SelectableType;
 import furgl.customizations.config.subCategories.BlockSubCategory;
 import furgl.customizations.customizations.Customization;
@@ -14,8 +14,8 @@ import net.minecraft.item.Items;
 
 public class BreakBlockTrigger extends SelectableType {
 
-	protected BreakBlockTrigger() {
-		super(SelectableType.Type.TRIGGER, "breakBlock", new ItemStack(Items.DIAMOND_PICKAXE));
+	public BreakBlockTrigger() {
+		super("triggers.breakBlock", new ItemStack(Items.DIAMOND_PICKAXE));
 	}
 
 	@Override

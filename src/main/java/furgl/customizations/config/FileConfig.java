@@ -16,6 +16,8 @@ import com.google.gson.JsonObject;
 import furgl.customizations.Customizations;
 import furgl.customizations.customizations.Customization;
 import furgl.customizations.customizations.CustomizationManager;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.JsonHelper;
 
 public class FileConfig {
@@ -28,7 +30,26 @@ public class FileConfig {
 	private static final String FILE = "./config/"+Customizations.MODID+".cfg";
 	private static File file;
 	
-	public static boolean showTips;
+	public static enum DebugMode {
+		OFF, BASIC, DETAILED;
+
+		public Text getName() {
+			return new TranslatableText("config."+Customizations.MODID+".debugMode."+this.name().toLowerCase()+".name");
+		}
+		public Text getTooltip() {
+			return new TranslatableText("config."+Customizations.MODID+".debugMode."+this.name().toLowerCase()+".tooltip");
+		}
+		
+		public static DebugMode getDebugMode(String mode) {
+			for (DebugMode mode2 : DebugMode.values())
+				if (mode2.name().equalsIgnoreCase(mode))
+					return mode2;
+			return DebugMode.OFF;
+		}
+	}
+	
+	public static boolean showTips = true;
+	public static DebugMode debugMode = DebugMode.OFF;
 
 	public static void init() {
 		try {
@@ -53,6 +74,9 @@ public class FileConfig {
 			
 			JsonElement element = parser.get("Show Tips");
 			showTips = element == null ? true : element.getAsBoolean();
+			
+			element = parser.get("Debug Mode");
+			debugMode = element == null ? DebugMode.OFF : DebugMode.getDebugMode(element.getAsString());
 
 			CustomizationManager.clearCustomizations();
 			for (Entry<String, JsonElement> entry : parser.entrySet()) {
@@ -74,6 +98,8 @@ public class FileConfig {
 			JsonObject obj = new JsonObject();
 
 			obj.addProperty("Show Tips", writeDefaults ? true : showTips);
+			
+			obj.addProperty("Debug Mode", writeDefaults ? DebugMode.OFF.name() : debugMode.name());
 			
 			ArrayList<Customization> customizations = CustomizationManager.getAllCustomizations();
 			for (int i=0; i<customizations.size(); ++i) 

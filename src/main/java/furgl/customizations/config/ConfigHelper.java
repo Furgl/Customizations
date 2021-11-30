@@ -1,6 +1,6 @@
 package furgl.customizations.config;
 
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
@@ -19,9 +19,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -30,7 +32,7 @@ public class ConfigHelper {
 
 	@Nullable
 	public static TextListEntry addTip(ConfigBuilder builder, String tip) {
-		return addTip(builder, tip, Formatting.GOLD);
+		return addTip(builder, tip, Config.TIP_FORMATTING);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -49,9 +51,17 @@ public class ConfigHelper {
 			return null;
 	}
 
-	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Iterable<T> selections, Function<String, T> stringToSelection, Function<T, Text> selectionToString, Consumer<T> saveConsumer) {
+	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText) {
+		return createFixedDropdownMenu(builder, name, tooltip, selection, stringToSelection, selectionToText, null);
+	}
+	
+	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText, @Nullable Function<T, ItemStack> getStack) {
+		return createFixedDropdownMenu(builder, name, tooltip, selection, stringToSelection, selectionToText, getStack, false);
+	}
+
+	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText, @Nullable Function<T, ItemStack> getStack, boolean noErrors) {
 		return builder.entryBuilder()
-				.startDropdownMenu(name, new DropdownBoxEntry.DefaultSelectionTopCellElement<T>(selection, stringToSelection, selectionToString) {
+				.startDropdownMenu(name, new DropdownBoxEntry.DefaultSelectionTopCellElement<T>(selection, stringToSelection, selectionToText) {
 					@Override
 					public void render(MatrixStack matrices, int mouseX, int mouseY, int x, int y, int width, int height, float delta) {
 						this.textFieldWidget.x = x + 4;
@@ -61,9 +71,10 @@ public class ConfigHelper {
 						this.textFieldWidget.setEditableColor(getPreferredTextColor());
 						this.textFieldWidget.render(matrices, mouseX, mouseY, delta);
 						// render item
-						if (getStack(this.getValue()) != null) {
+						ItemStack stack = getStack(this.getValue(), getStack);
+						if (stack != null) {
 							ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-							ItemStack stack = hasConfigError() ? new ItemStack(Items.BARRIER) : getStack(this.getValue());
+							stack = hasConfigError() ? new ItemStack(Items.BARRIER) : stack;
 							itemRenderer.renderGuiItemIcon(stack, x + width - 18, y + 2);
 						}
 						// draw tooltip
@@ -74,6 +85,14 @@ public class ConfigHelper {
 							else if (!b && mouseY > y && mouseY <= y + height)
 								((ClothConfigScreen)MinecraftClient.getInstance().currentScreen).addTooltip(Tooltip.of(new Point(mouseX, mouseY), tooltip));
 						}
+					}
+					@Override
+					public Optional<Text> getError() {
+						// if no errors, never show errors
+						if (noErrors)
+							return Optional.empty();
+						else
+							return super.getError();
 					}
 					@Override
 					public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -92,7 +111,7 @@ public class ConfigHelper {
 						return ret;
 					}
 				},
-						new DropdownBoxEntry.DefaultSelectionCellCreator<T>(selectionToString) {
+						new DropdownBoxEntry.DefaultSelectionCellCreator<T>(selectionToText) {
 					@Override
 					public DropdownBoxEntry.SelectionCellElement<T> create(T selection) {
 						final T value = selection;
@@ -111,10 +130,10 @@ public class ConfigHelper {
 								// draw text
 								(MinecraftClient.getInstance()).textRenderer.drawWithShadow(matrices, ((Text)this.toTextFunction.apply(this.r)).asOrderedText(), (x + 4 + 19), (y + 6), b ? 16777215 : 8947848);
 								// draw item
-								if (getStack(value) != null) {
+								if (getStack(value, getStack) != null) {
 									ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-									itemRenderer.zOffset = 250;
-									itemRenderer.renderGuiItemIcon(getStack(value), x + 4, y + 2);
+									itemRenderer.zOffset = 201;
+									itemRenderer.renderGuiItemIcon(getStack(value, getStack), x + 4, y + 2);
 								}
 								// draw tooltip
 								if (b && MinecraftClient.getInstance().currentScreen instanceof ClothConfigScreen && getTooltip(value) != null)
@@ -134,19 +153,21 @@ public class ConfigHelper {
 					public int getDropBoxMaxHeight() {
 						return getCellHeight() * 7;
 					}
-				})
-				.setSaveConsumer(saveConsumer)
-				.setSelections(selections);
+				});
 	}
 
 	@Nullable
-	private static ItemStack getStack(Object value) {
+	private static <T> ItemStack getStack(Object value, @Nullable Function<T, ItemStack> getStack) {
 		if (value instanceof Selectable)
 			return ((Selectable)value).getStack();
 		else if (value instanceof Block)
 			return new ItemStack((Block)value);
 		else if (value instanceof Item)
 			return new ItemStack((Item)value);
+		else if (value instanceof EntityType)
+			return new ItemStack(SpawnEggItem.forEntity((EntityType<?>) value));
+		else if (getStack != null)
+			return getStack.apply((T) value);
 		return null;
 	}
 

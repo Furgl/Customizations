@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.config.Config;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.lists.ActionList;
 import furgl.customizations.config.lists.ConditionList;
 import furgl.customizations.config.lists.TriggerList;

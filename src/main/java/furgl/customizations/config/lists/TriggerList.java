@@ -3,8 +3,6 @@ package furgl.customizations.config.lists;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.google.common.collect.Lists;
 
 import furgl.customizations.config.ConfigHelper;

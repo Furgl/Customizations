@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.parts.RandomPart;
 import furgl.customizations.config.selectors.SelectableType;
 import furgl.customizations.customizations.Customization;
@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 
 public class RandomCondition extends SelectableType {
 
-	protected RandomCondition() {
-		super(SelectableType.Type.CONDITION, "random", new ItemStack(Blocks.DISPENSER));
+	public RandomCondition() {
+		super("conditions.random", new ItemStack(Blocks.DISPENSER));
 	}
 
 	@Override

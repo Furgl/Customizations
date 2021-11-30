@@ -7,6 +7,7 @@ import furgl.customizations.config.subCategories.CustomizationSubCategory;
 import furgl.customizations.config.subCategories.SubCategory;
 import furgl.customizations.customizations.Customization;
 import furgl.customizations.customizations.CustomizationManager;
+import net.minecraft.text.Text;
 
 public class CustomizationList extends CList {
 
@@ -41,6 +42,11 @@ public class CustomizationList extends CList {
 		return CustomizationManager.getAllCustomizations().stream()
 				.map(customization -> new CustomizationSubCategory(customization))
 				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Text getTooltip() {
+		return Text.of("");
 	}
 
 }

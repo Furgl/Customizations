@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 
 import furgl.customizations.Customizations;
 import furgl.customizations.config.Config;
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.subCategories.SubCategory;
 import furgl.customizations.customizations.Customization;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -19,6 +19,7 @@ import me.shedaniel.clothconfig2.gui.entries.StringListListEntry;
 import me.shedaniel.clothconfig2.gui.entries.StringListListEntry.StringListCell;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 /**String list that controls adding, deleting, and renaming Parts*/
 public abstract class CList extends ConfigElement {
@@ -33,8 +34,6 @@ public abstract class CList extends ConfigElement {
 
 	@Override
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
-		System.out.println("adding to config: "+this.getName().getString()+" ("+this.getClass().getSimpleName()+")"); // TODO remove
-
 		// create list
 		this.mainConfigEntry = this.list = builder.entryBuilder()
 				.startStrList(this.getName(), createItems())
@@ -52,6 +51,7 @@ public abstract class CList extends ConfigElement {
 				})
 				.setCreateNewInstance(entry -> new StringListCell(this.getDefaultInstanceName(), entry))
 				.setInsertInFront(false)
+				.setTooltipSupplier(() -> this.getTooltip().getString().isEmpty() ? Optional.empty() : Optional.of(new Text[] {this.getTooltip()}))
 				.build();
 
 		this.getSubCategories().forEach(subCategory -> subCategory.getOrCreateConfigEntries(builder));
@@ -79,15 +79,11 @@ public abstract class CList extends ConfigElement {
 				ArrayList<String> addedValues = Lists.newArrayList();
 				ArrayList<String> deletedValues = Lists.newArrayList();
 				for (String value : values)
-					if (!previousValues.contains(value)) {
-						System.out.println("added: "+value); // TODO remove
+					if (!previousValues.contains(value)) 
 						addedValues.add(value);
-					}
 				for (String previousValue : previousValues)
-					if (!values.contains(previousValue)) {
-						System.out.println("deleted: "+previousValue); // TODO remove
+					if (!values.contains(previousValue)) 
 						deletedValues.add(previousValue);
-					}
 				// add/delete them
 				for (String addedValue : addedValues) 
 					this.addItem(addedValue);
@@ -100,12 +96,8 @@ public abstract class CList extends ConfigElement {
 				for (int i=0; i<values.size(); ++i) {
 					String previousValue = previousValues.get(i);
 					String value = values.get(i);
-					if (!value.equals(previousValue)) {
-						System.out.println("previousValues: "+previousValues+" values: "+values); // TODO remove
-						System.out.println("name change from: "+previousValue+" to: "+value); // TODO remove
+					if (!value.equals(previousValue)) 
 						this.updateName(i, value);
-						this.mainConfigEntry.save();
-					}
 				}
 			}
 		}
@@ -134,7 +126,7 @@ public abstract class CList extends ConfigElement {
 
 	@Override
 	public Text getName() {
-		return Text.of(Config.LIST_FORMATTING+super.getName().getString());
+		return Text.of(Config.LIST_FORMATTING+""+Formatting.UNDERLINE+super.getName().getString());
 	}
 
 	/**Called when new item is added to the list*/

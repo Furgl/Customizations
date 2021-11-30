@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.parts.BlockPart;
 import furgl.customizations.customizations.Customization;
 import furgl.customizations.customizations.context.ContextHolder;

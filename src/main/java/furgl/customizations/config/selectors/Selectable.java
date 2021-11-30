@@ -2,7 +2,7 @@ package furgl.customizations.config.selectors;
 
 import java.util.List;
 
-import furgl.customizations.config.ConfigElement;
+import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.customizations.Customization;
 import furgl.customizations.customizations.context.ContextHolder;
 import net.minecraft.item.ItemStack;
@@ -19,5 +19,9 @@ public interface Selectable<T> {
 
 	/**Get item stack to represent this selection in drop down menu*/
 	ItemStack getStack();
+
+	String getId();
+
+	Text getName();
 	
 }

@@ -4,7 +4,8 @@
 	"package": "furgl.customizations.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"ServerPlayerInteractionManagerMixin"
+		"triggers.ServerPlayerInteractionManagerMixin",
+		"WorldAccessor"
 	],
 	"client": [
 	"ClothConfigScreenMixin",
