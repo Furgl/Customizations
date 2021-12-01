@@ -40,7 +40,7 @@ public abstract class Context {
 	public JsonElement writeToConfig() {
 		JsonObject obj = new JsonObject();
 		for (Variable variable : this.variables)
-			obj.addProperty(variable.name, (String) variable.toString.apply(variable.getValue.get()));
+			obj.addProperty(variable.name, variable.getValue.get() == null ? "" : (String) variable.toString.apply(variable.getValue.get()));
 		return obj;
 	}
 

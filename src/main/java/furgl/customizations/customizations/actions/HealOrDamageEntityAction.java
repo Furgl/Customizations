@@ -30,9 +30,9 @@ public class HealOrDamageEntityAction extends SelectableType {
 	}
 
 	@Override
-	public void activate(Context... contexts) {
-		Set<Entity> entities = ContextHelper.getEntity(LivingEntity.class, contexts);
-		Contexts.get(Contexts.HEAL_OR_DAMAGE_AMOUNT, contexts).ifPresent(context -> {
+	public void activate(Context[] actionContexts, Context[] triggerContexts) {
+		Set<Entity> entities = ContextHelper.getEntity(LivingEntity.class, actionContexts, triggerContexts);
+		Contexts.get(Contexts.HEAL_OR_DAMAGE_AMOUNT, actionContexts).ifPresent(context -> {
 			for (Entity entity : entities) {
 				if (((HealOrDamageContext)context).heal > 0)
 					((LivingEntity)entity).heal(((HealOrDamageContext)context).heal);

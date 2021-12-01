@@ -70,7 +70,7 @@ public class DimensionPart extends Part {
 
 	@Override
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
-		DropdownMenuBuilder menu = ConfigHelper.createFixedDropdownMenu(builder, this.getName(), this.getTooltip(), 
+		DropdownMenuBuilder menu = ConfigHelper.createDropdownMenu(builder, this.getName(), this.getTooltip(), 
 				this.contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).dimension == null ? "" : this.contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).dimension.getValue().toString(), 
 						value -> {
 							RegistryKey<World> key = Dimension.getKey(value);

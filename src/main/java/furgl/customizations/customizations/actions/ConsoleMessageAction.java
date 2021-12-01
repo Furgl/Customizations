@@ -23,10 +23,8 @@ public class ConsoleMessageAction extends SelectableType {
 	}
 
 	@Override
-	public void activate(Context... contexts) {
-		for (Context context : contexts)
-			if (context.equals(Contexts.CONSOLE_MESSAGE))
-				Customizations.LOGGER.info(((ConsoleMessageContext)context).message);
+	public void activate(Context[] actionContexts, Context[] triggerContexts) {
+		Contexts.get(Contexts.CONSOLE_MESSAGE, actionContexts).ifPresent(context -> Customizations.LOGGER.info(((ConsoleMessageContext)context).message));
 	}
 
 	@Override

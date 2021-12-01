@@ -7,7 +7,7 @@ import me.shedaniel.clothconfig2.gui.AbstractConfigScreen;
 import net.minecraft.client.gui.screen.Screen;
 
 @Mixin(AbstractConfigScreen.class)
-public interface IAbstractConfigScreen {
+public interface AbstractConfigScreenAccessor {
 
 	@Accessor("parent")
 	Screen getParent();

@@ -1,6 +1,7 @@
 {
 	"config.customizations.name": "Customizations",
-	"config.customizations.category.general": "Customizations",
+	"config.customizations.category.customizations": "Customizations",
+	"config.customizations.category.general": "General",
 	"config.customizations.addButton.tooltip": "Add ",
 	"config.customizations.duplicate": "Duplicate name",
 	"config.customizations.customizations.instance.name": "Customization",
@@ -69,6 +70,8 @@
 	"config.customizations.entity.nearest.tooltip": "The entity nearest to a position",
 	"config.customizations.entity.specific.name": "Specific Entity",
 	"config.customizations.entity.specific.tooltip": "A specific entity",
+	"config.customizations.entity.allPlayers.name": "All Players",
+	"config.customizations.entity.allPlayers.tooltip": "All online players",
 	
 	"config.customizations.position.name": "Position",
 	"config.customizations.position.tooltip": "",

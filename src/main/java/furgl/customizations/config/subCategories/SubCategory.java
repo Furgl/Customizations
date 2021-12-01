@@ -1,12 +1,14 @@
 package furgl.customizations.config.subCategories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import furgl.customizations.config.Config;
+import furgl.customizations.config.ConfigHelper;
 import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.customizations.Customization;
+import furgl.customizations.customizations.context.Context;
 import furgl.customizations.impl.IAbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -26,8 +28,8 @@ public abstract class SubCategory extends ConfigElement {
 		this.getChildren().stream()
 		.map(element -> element.getOrCreateConfigEntries(builder))
 		.forEach(list -> children.addAll(list));
-		this.mainConfigEntry = builder.entryBuilder()
-				.startSubCategory(this.getName(), children)
+		this.mainConfigEntry = ConfigHelper
+				.createSubCategory(builder, this.getName(), children, false)
 				.build();
 
 		return Lists.newArrayList(this.mainConfigEntry);
@@ -45,12 +47,15 @@ public abstract class SubCategory extends ConfigElement {
 
 	/**Called when this controlling list item is renamed*/
 	public void updateName(String name) {
-		((IAbstractConfigListEntry)this.getMainConfigEntry()).setFieldName(Text.of(Config.SUB_CATEGORY_FORMATTING+name));
+		((IAbstractConfigListEntry)this.getMainConfigEntry()).setFieldName(Text.of(name));
 	}
-
+	
 	@Override
-	public Text getName() {
-		return Text.of(Config.SUB_CATEGORY_FORMATTING+super.getName().getString());
+	public ArrayList<Context> getRelatedContexts() {
+		ArrayList<Context> contexts = Lists.newArrayList();
+		for (ConfigElement element : this.getChildren())
+			contexts.addAll(element.getRelatedContexts());
+		return contexts;
 	}
 
 }

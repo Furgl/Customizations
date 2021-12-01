@@ -96,18 +96,21 @@ public class ContextHelper {
 		return Sets.newHashSet();
 	}
 
-	/**Get entity from these contexts*/
-	public static Set<Entity> getEntity(Class<? extends Entity> baseClass, Context... contexts) {
-		Selectable selectable = Contexts.get(Contexts.SELECTED_ENTITY, contexts).map(context -> context.type).orElse(Selectables.NONE);
-		World world = Contexts.get(Contexts.CAUSE_WORLD, contexts).map(context -> context.getWorld()).orElse(null);
+	/**Get entity from these contexts
+	 * @param triggerContexts */
+	public static Set<Entity> getEntity(Class<? extends Entity> baseClass, Context[] actionContexts, Context[] triggerContexts) {
+		Selectable selectable = Contexts.get(Contexts.SELECTED_ENTITY, actionContexts).map(context -> context.type).orElse(Selectables.NONE);
+		World world = Contexts.get(Contexts.CAUSE_WORLD, triggerContexts).map(context -> context.getWorld()).orElse(null);
 		if (selectable == Selectables.ENTITY_CAUSE) 
-			return Contexts.get(Contexts.CAUSE_ENTITY, contexts).map(context -> getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.CAUSE_ENTITY, triggerContexts).map(context -> getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
 		else if (selectable == Selectables.ENTITY_TARGET)
-			return Contexts.get(Contexts.TARGET_ENTITY, contexts).map(context -> getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.TARGET_ENTITY, triggerContexts).map(context -> getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
 		else if (selectable == Selectables.ENTITY_SPECIFIC)
-			return Contexts.get(Contexts.SELECTED_ENTITY, contexts).map(context -> getEntity(world, context.uuid, -1, context.playerName)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.SELECTED_ENTITY, actionContexts).map(context -> getEntity(world, context.uuid, -1, context.playerName)).orElse(Sets.newHashSet());
 		else if (selectable == Selectables.ENTITY_NEAREST)
-			return Contexts.get(Contexts.SELECTED_ENTITY, contexts).map(context -> getNearestEntities(context.entityType, getLocation(context.positionType, contexts), context.radius, context.numberOfEntities, baseClass)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.SELECTED_ENTITY, actionContexts).map(context -> getNearestEntities(context.entityType, getLocation(context.positionType, actionContexts), context.radius, context.numberOfEntities, baseClass)).orElse(Sets.newHashSet());
+		else if (selectable == Selectables.ENTITY_ALL_PLAYERS && Customizations.server != null)
+			return Sets.newHashSet(Customizations.server.getPlayerManager().getPlayerList());
 		return Sets.newHashSet();
 	}
 

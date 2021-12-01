@@ -1,19 +1,25 @@
 package furgl.customizations.config;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import furgl.customizations.Customizations;
 import furgl.customizations.config.selectors.Selectable;
-import furgl.customizations.mixin.DropdownBoxEntryAccessor;
+import furgl.customizations.impl.IAbstractConfigScreen;
+import me.shedaniel.clothconfig2.api.AbstractConfigEntry;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.Tooltip;
-import me.shedaniel.clothconfig2.gui.ClothConfigScreen;
+import me.shedaniel.clothconfig2.gui.entries.AbstractListListEntry;
 import me.shedaniel.clothconfig2.gui.entries.DropdownBoxEntry;
+import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.gui.entries.TextListEntry;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import me.shedaniel.math.Point;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
@@ -24,15 +30,43 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 public class ConfigHelper {
 
+	public static final Formatting LIST_FORMATTING = Formatting.BLUE;
+	public static final Formatting SUB_CATEGORY_FORMATTING = Formatting.GREEN;
+	public static final Formatting SELECTOR_FORMATTING = Formatting.YELLOW; // TODO unused?
+	public static final Formatting TIP_FORMATTING = Formatting.GOLD;
+
+	private static final Text RESET_BUTTON = new TranslatableText("text.cloth-config.reset_value");
+
+	/**Custom method for changing text color properly*/
+	public static Text getDisplayedFieldName(AbstractConfigEntry entry) {
+		MutableText text = entry.getFieldName().shallowCopy();
+		boolean hasError = entry.getConfigError().isPresent(); 
+		boolean isEdited = entry.isEdited();
+		if (hasError)
+			text = text.formatted(Formatting.RED); 
+		if (isEdited)
+			text = text.formatted(Formatting.ITALIC); 
+		if (!hasError) {
+			if (entry instanceof AbstractListListEntry)
+				text = text.formatted(LIST_FORMATTING).formatted(Formatting.UNDERLINE);
+			else if (entry instanceof SubCategoryListEntry)
+				text = text.formatted(SUB_CATEGORY_FORMATTING);
+			else if (!isEdited)
+				text = text.formatted(Formatting.GRAY); 
+		}
+		return (Text)text;
+	}
+
 	@Nullable
 	public static TextListEntry addTip(ConfigBuilder builder, String tip) {
-		return addTip(builder, tip, Config.TIP_FORMATTING);
+		return addTip(builder, tip, TIP_FORMATTING);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -40,7 +74,7 @@ public class ConfigHelper {
 	public static TextListEntry addTip(ConfigBuilder builder, String tip, Formatting formatting) {
 		if (FileConfig.showTips) {
 			final Text text = new TranslatableText("config."+Customizations.MODID+".tips."+tip).formatted(Formatting.ITALIC, formatting);
-			return new TextListEntry(new TranslatableText("text.cloth-config.reset_value"), text, -1, null) {
+			return new TextListEntry(RESET_BUTTON, text, -1, null) {
 				@Override  
 				public int getItemHeight() {
 					return super.getItemHeight() - 7;
@@ -51,19 +85,42 @@ public class ConfigHelper {
 			return null;
 	}
 
-	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText) {
-		return createFixedDropdownMenu(builder, name, tooltip, selection, stringToSelection, selectionToText, null);
-	}
-	
-	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText, @Nullable Function<T, ItemStack> getStack) {
-		return createFixedDropdownMenu(builder, name, tooltip, selection, stringToSelection, selectionToText, getStack, false);
+	public static SubCategoryBuilder createSubCategory(ConfigBuilder builder, Text name, List<AbstractConfigListEntry> children, boolean expanded) {
+		return createSubCategory(builder, name, children, expanded, list -> Optional.empty());
 	}
 
-	public static <T> DropdownMenuBuilder<T> createFixedDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText, @Nullable Function<T, ItemStack> getStack, boolean noErrors) {
+	public static SubCategoryBuilder createSubCategory(ConfigBuilder builder, Text name, List<AbstractConfigListEntry> children, boolean expanded, Function<List<AbstractConfigListEntry>, Optional<Text[]>> tooltipSupplier) {
+		return new SubCategoryBuilder(RESET_BUTTON, name) {
+			@SuppressWarnings("deprecation")
+			@NotNull
+			public SubCategoryListEntry build() {
+				SubCategoryListEntry entry = new SubCategoryListEntry(getFieldNameKey(), children, expanded) {
+
+				};
+				entry.setTooltipSupplier(() -> (Optional)tooltipSupplier.apply(entry.getValue()));
+				return entry;
+			}
+		};
+	}
+
+	public static <T> DropdownMenuBuilder<T> createDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText) {
+		return createDropdownMenu(builder, name, tooltip, selection, stringToSelection, selectionToText, null);
+	}
+
+	public static <T> DropdownMenuBuilder<T> createDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText, @Nullable Function<T, ItemStack> getStack) {
+		return createDropdownMenu(builder, name, tooltip, selection, stringToSelection, selectionToText, getStack, false);
+	}
+
+	public static <T> DropdownMenuBuilder<T> createDropdownMenu(ConfigBuilder builder, Text name, Text tooltip, T selection, Function<String, T> stringToSelection, Function<T, Text> selectionToText, @Nullable Function<T, ItemStack> getStack, boolean noErrors) {
 		return builder.entryBuilder()
 				.startDropdownMenu(name, new DropdownBoxEntry.DefaultSelectionTopCellElement<T>(selection, stringToSelection, selectionToText) {
+					private boolean unfocus;
 					@Override
 					public void render(MatrixStack matrices, int mouseX, int mouseY, int x, int y, int width, int height, float delta) {
+						if (unfocus) {
+							this.getParent().setFocused(null);
+							unfocus = false;
+						}
 						this.textFieldWidget.x = x + 4;
 						this.textFieldWidget.y = y + 6;
 						this.textFieldWidget.setWidth(width - 4 - 16);
@@ -79,11 +136,11 @@ public class ConfigHelper {
 						}
 						// draw tooltip
 						boolean b = (mouseX >= x && mouseX <= x + width && mouseY > y && mouseY <= y + height);
-						if (MinecraftClient.getInstance().currentScreen instanceof ClothConfigScreen) {
+						if (MinecraftClient.getInstance().currentScreen instanceof IAbstractConfigScreen) {
 							if (b && getTooltip(this.getValue()) != null && !getTooltip(this.getValue()).getString().isEmpty() && !hasConfigError()) 
-								((ClothConfigScreen)MinecraftClient.getInstance().currentScreen).addTooltip(Tooltip.of(new Point(mouseX, mouseY), getTooltip(this.getValue())));
-							else if (!b && mouseY > y && mouseY <= y + height)
-								((ClothConfigScreen)MinecraftClient.getInstance().currentScreen).addTooltip(Tooltip.of(new Point(mouseX, mouseY), tooltip));
+								((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), getTooltip(this.getValue())));
+							else if (!b && mouseY > y && mouseY <= y + height && !tooltip.getString().isEmpty())
+								((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), tooltip));
 						}
 					}
 					@Override
@@ -101,14 +158,20 @@ public class ConfigHelper {
 						if (mouseX >= this.textFieldWidget.x && mouseX <= (this.textFieldWidget.x + this.textFieldWidget.getWidth()) && mouseY >= this.textFieldWidget.y-5 && mouseY <= (this.textFieldWidget.y + this.textFieldWidget.getHeight())) { 
 							if (button == 1) { // right-click
 								this.textFieldWidget.setText(""); // clear text
-								this.isSelected = true;
-								this.getParent().setFocused(((DropdownBoxEntryAccessor)this.getParent()).getSelectionElement()); // expand dropdown
+								ret = true;
 							}
 						}
 						// unfocus when clicking elsewhere (except in dropdown)
 						else if (mouseX < this.textFieldWidget.x || mouseX > (this.textFieldWidget.x + this.textFieldWidget.getWidth()) || mouseY < this.textFieldWidget.y) 
 							this.getParent().setFocused(null);
 						return ret;
+					}
+					@Override
+					public void setValue(T value) {
+						this.textFieldWidget.setText(((Text)this.toTextFunction.apply(value)).getString());
+						this.textFieldWidget.setCursor(0);
+						// hide dropdown after setting value
+						unfocus = true;
 					}
 				},
 						new DropdownBoxEntry.DefaultSelectionCellCreator<T>(selectionToText) {
@@ -132,12 +195,12 @@ public class ConfigHelper {
 								// draw item
 								if (getStack(value, getStack) != null) {
 									ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-									itemRenderer.zOffset = 201;
+									itemRenderer.zOffset = 210;
 									itemRenderer.renderGuiItemIcon(getStack(value, getStack), x + 4, y + 2);
 								}
 								// draw tooltip
-								if (b && MinecraftClient.getInstance().currentScreen instanceof ClothConfigScreen && getTooltip(value) != null)
-									((ClothConfigScreen)MinecraftClient.getInstance().currentScreen).addTooltip(Tooltip.of(new Point(mouseX, mouseY), getTooltip(value)));
+								if (b && MinecraftClient.getInstance().currentScreen instanceof IAbstractConfigScreen && getTooltip(value) != null)
+									((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), getTooltip(value)));
 							}
 						};
 					}

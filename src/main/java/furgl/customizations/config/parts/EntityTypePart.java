@@ -37,7 +37,7 @@ public class EntityTypePart extends Part {
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
 		Set<String> selections = Registry.ENTITY_TYPE.stream().map(type -> EntityType.getId(type).toString()).collect(Collectors.toSet());
 		selections.add(Selectables.ANY.getName().getString());
-		this.mainConfigEntry = ConfigHelper.<String>createFixedDropdownMenu(builder, this.getName(), this.getTooltip(), 
+		this.mainConfigEntry = ConfigHelper.<String>createDropdownMenu(builder, this.getName(), this.getTooltip(), 
 				this.contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).entityType == null ? Selectables.ANY.getName().getString() : 
 					EntityType.getId(this.contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).entityType).toString(), 
 					value -> {

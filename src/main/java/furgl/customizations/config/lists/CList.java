@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.Customizations;
-import furgl.customizations.config.Config;
 import furgl.customizations.config.elements.ConfigElement;
 import furgl.customizations.config.subCategories.SubCategory;
 import furgl.customizations.customizations.Customization;
@@ -19,7 +18,6 @@ import me.shedaniel.clothconfig2.gui.entries.StringListListEntry;
 import me.shedaniel.clothconfig2.gui.entries.StringListListEntry.StringListCell;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 
 /**String list that controls adding, deleting, and renaming Parts*/
 public abstract class CList extends ConfigElement {
@@ -123,12 +121,7 @@ public abstract class CList extends ConfigElement {
 		while (this.previousValues.contains(name));
 		return name;	
 	}
-
-	@Override
-	public Text getName() {
-		return Text.of(Config.LIST_FORMATTING+""+Formatting.UNDERLINE+super.getName().getString());
-	}
-
+	
 	/**Called when new item is added to the list*/
 	protected abstract void addItem(String addedValue);
 

@@ -1,9 +1,7 @@
 package furgl.customizations.customizations.actions;
 
-import java.util.List;
 import java.util.Map.Entry;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -42,10 +40,8 @@ public class Action extends ContextHolder {
 	}
 
 	/**Activate this action*/
-	public void activate(Context... eventContext) {
-		List<Context> contexts = Lists.newArrayList(eventContext);
-		contexts.addAll(this.getContext()); // TEST is it appropriate to mix all contexts here?
-		this.type.activate(contexts.toArray(new Context[0]));
+	public void activate(Context... eventContexts) {
+		this.type.activate(this.getContext().toArray(new Context[0]), eventContexts);
 	}
 	
 }

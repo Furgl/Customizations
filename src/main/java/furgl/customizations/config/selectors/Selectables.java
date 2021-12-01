@@ -38,6 +38,7 @@ public class Selectables {
 	public static final SelectableType ENTITY_TARGET = new SelectableType("entity.target", new ItemStack(Items.CREEPER_SPAWN_EGG));
 	public static final SelectableType ENTITY_NEAREST = new SelectableType("entity.nearest", new ItemStack(Items.BLAZE_SPAWN_EGG), (c, ctx) -> Lists.newArrayList(new EntityTypePart(c, ctx), new RadiusPart(c, ctx), new NumberOfEntitiesPart(c, ctx), new PositionSubCategory(c, ctx)));
 	public static final SelectableType ENTITY_SPECIFIC = new SelectableType("entity.specific", new ItemStack(Items.AXOLOTL_SPAWN_EGG), (c, ctx) -> Lists.newArrayList(new UUIDPart(c, ctx), new PlayerNamePart(c, ctx)));
+	public static final SelectableType ENTITY_ALL_PLAYERS = new SelectableType("entity.allPlayers", new ItemStack(Items.BEE_SPAWN_EGG));
 	
 	public static final SelectableType POSITION_CAUSE = new SelectableType("position.cause", new ItemStack(Blocks.GRASS_BLOCK));
 	public static final SelectableType POSITION_TARGET = new SelectableType("position.target", new ItemStack(Blocks.DIRT));

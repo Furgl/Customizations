@@ -9,10 +9,13 @@
 	],
 	"client": [
 	"ClothConfigScreenMixin",
-	"IAbstractConfigScreen",
+	"AbstractConfigEntryMixin",
+	"AbstractConfigScreenMixin",
+	"AbstractConfigScreenAccessor",
 	"AbstractConfigListEntryMixin",
 	"DropdownBoxEntryMixin",
-	"DropdownBoxEntryAccessor"
+	"DropdownBoxEntryAccessor",
+	"TextFieldWidgetMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

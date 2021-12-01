@@ -58,6 +58,6 @@ public class SelectableType implements Selectable {
 	}
 
 	/**Activate this action*/
-	public void activate(Context... contexts) {}
+	public void activate(Context[] actionContexts, Context[] triggerContexts) {}
 
 }

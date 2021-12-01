@@ -22,9 +22,9 @@ public class ServerCommandAction extends SelectableType {
 	}
 
 	@Override
-	public void activate(Context... contexts) {
+	public void activate(Context[] actionContexts, Context[] triggerContexts) {
 		if (Customizations.server != null)
-			Contexts.get(Contexts.COMMAND, contexts)
+			Contexts.get(Contexts.COMMAND, actionContexts)
 			.ifPresent(context -> Customizations.server.getCommandManager().execute(Customizations.server.getCommandSource(), context.command));
 	}
 

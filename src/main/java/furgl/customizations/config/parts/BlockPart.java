@@ -30,7 +30,7 @@ public class BlockPart extends Part {
 
 	@Override
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
-		this.mainConfigEntry = ConfigHelper.createFixedDropdownMenu(builder, this.getName(), this.getTooltip(), 
+		this.mainConfigEntry = ConfigHelper.createDropdownMenu(builder, this.getName(), this.getTooltip(), 
 				this.contextHolder.getOrAddContext(
 						Contexts.BLOCK).block, 
 				str -> {

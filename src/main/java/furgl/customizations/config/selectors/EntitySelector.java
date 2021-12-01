@@ -17,7 +17,8 @@ public class EntitySelector<T extends Selectable> extends Selector {
 						Selectables.ENTITY_CAUSE,
 						Selectables.ENTITY_TARGET,
 						Selectables.ENTITY_NEAREST,
-						Selectables.ENTITY_SPECIFIC),
+						Selectables.ENTITY_SPECIFIC,
+						Selectables.ENTITY_ALL_PLAYERS),
 				value -> Selectables.getTypeByName((String) value), 
 				value -> ((Selectable)value).getName(), 
 				value -> contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).type = (Selectable) value);

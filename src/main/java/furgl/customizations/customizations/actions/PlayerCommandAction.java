@@ -27,11 +27,11 @@ public class PlayerCommandAction extends SelectableType {
 	}
 
 	@Override
-	public void activate(Context... contexts) {
+	public void activate(Context[] actionContexts, Context[] triggerContexts) {
 		if (Customizations.server != null) {
-			Set<Entity> entities = ContextHelper.getEntity(PlayerEntity.class, contexts);
+			Set<Entity> entities = ContextHelper.getEntity(PlayerEntity.class, actionContexts, triggerContexts);
 			for (Entity entity : entities)
-				Contexts.get(Contexts.COMMAND, contexts)
+				Contexts.get(Contexts.COMMAND, actionContexts)
 				.ifPresent(context -> Customizations.server.getCommandManager().execute(entity.getCommandSource(), context.command));
 		}
 	}
