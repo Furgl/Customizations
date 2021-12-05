@@ -1,10 +1,11 @@
 {
-	"example.customizations.translation": "Test",
-	
-	"config.customizations.name": "Customizations",
+	"config.customizations.singleplayer.name": "Customizations (Singleplayer)",
+	"config.customizations.multiplayer.name": "Customizations (Multiplayer)",
 	"config.customizations.addButton.tooltip": "Add ",
 	"config.customizations.duplicate": "Duplicate name",
  	"config.customizations.placeholders.tooltip": "Supported placeholders: ",
+ 	"config.customizations.multiplayerWaitingScreen.waiting": "Waiting for server...",
+ 	"config.customizations.multiplayerWaitingScreen.error": "You must be opped in order to edit the server's config",
  	
  	"config.customizations.category.customizations": "Customizations",
 	"config.customizations.category.general": "General",

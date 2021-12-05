@@ -103,7 +103,7 @@ public class ConfigHelper {
 				// draw tooltip
 				if (isMouseInside(mouseX, mouseY, x, y, entryWidth, entryHeight) && MinecraftClient.getInstance().currentScreen instanceof IAbstractConfigScreen) {
 					// show value if text field hovered
-					if (this.textFieldWidget.isHovered())
+					if (this.textFieldWidget.isMouseOver(mouseX, mouseY) && !this.getValue().isEmpty())
 						((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), Text.of(this.getValue())));
 					// show tooltip if not hovering over text field
 					else if (tooltip != null) 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import furgl.customizations.client.config.ConfigHelper;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
 import furgl.customizations.common.customizations.context.ContextHolder;
@@ -25,11 +26,10 @@ public class CommandPart extends Part {
 
 	@Override
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
-		this.mainConfigEntry = builder.entryBuilder()
-				.startStrField(this.getName(), this.contextHolder.getOrAddContext(Contexts.COMMAND).command)
-				.setSaveConsumer(command -> this.contextHolder.getOrAddContext(Contexts.COMMAND).command = command)
-				.setTooltip(this.getTooltip())
-				.build();
+		this.mainConfigEntry = ConfigHelper.createStrField(builder, this.getName(), 
+				this.contextHolder.getOrAddContext(Contexts.COMMAND).command, 
+				command -> this.contextHolder.getOrAddContext(Contexts.COMMAND).command = command, 
+				this.getTooltip());
 		return Lists.newArrayList(this.mainConfigEntry);
 	}
 

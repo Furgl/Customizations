@@ -70,24 +70,43 @@ public class FileConfig {
 
 	public static void readFromFile() {
 		try (BufferedReader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-			JsonObject parser = (JsonObject) JsonHelper.deserialize(reader);
-			
-			JsonElement element = parser.get("Show Tips");
-			showTips = element == null ? true : element.getAsBoolean();
-			
-			element = parser.get("Debug Mode");
-			debugMode = element == null ? DebugMode.OFF : DebugMode.getDebugMode(element.getAsString());
+			readFromObject((JsonObject) JsonHelper.deserialize(reader));
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void readFromString(String str) {
+		try {
+			readFromObject((JsonObject) JsonHelper.deserialize(str));
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void readFromObject(JsonObject parser) {
+		JsonElement element = parser.get("Show Tips");
+		showTips = element == null ? true : element.getAsBoolean();
+		
+		element = parser.get("Debug Mode");
+		debugMode = element == null ? DebugMode.OFF : DebugMode.getDebugMode(element.getAsString());
 
-			CustomizationManager.clearCustomizations();
-			for (Entry<String, JsonElement> entry : parser.entrySet()) {
-				if (entry.getKey().startsWith("Customization ")) {
-					Customization customization = Customization.readFromConfig(entry.getValue());
-					if (customization != null)
-						CustomizationManager.addCustomization(customization);
-				}
+		CustomizationManager.clearCustomizations();
+		for (Entry<String, JsonElement> entry : parser.entrySet()) {
+			if (entry.getKey().startsWith("Customization ")) {
+				Customization customization = Customization.readFromConfig(entry.getValue());
+				if (customization != null)
+					CustomizationManager.addCustomization(customization);
 			}
-			Customizations.LOGGER.info("Loaded "+CustomizationManager.getNumberOfCustomizations()+" Customization"+(CustomizationManager.getNumberOfCustomizations() == 1 ? "" : "s"));
-
+		}
+		Customizations.LOGGER.info("Loaded "+CustomizationManager.getNumberOfCustomizations()+" Customization"+(CustomizationManager.getNumberOfCustomizations() == 1 ? "" : "s"));
+	}
+	
+	public static void writeToFile(String config) {
+		try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {			
+			writer.write(config);
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -95,22 +114,36 @@ public class FileConfig {
 	}
 
 	public static void writeToFile(boolean writeDefaults) {
-		try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
-			JsonObject obj = new JsonObject();
-
-			obj.addProperty("Show Tips", writeDefaults ? true : showTips);
-			
-			obj.addProperty("Debug Mode", writeDefaults ? DebugMode.OFF.name() : debugMode.name());
-			
-			ArrayList<Customization> customizations = CustomizationManager.getAllCustomizations();
-			for (int i=0; i<customizations.size(); ++i) 
-				obj.add("Customization "+(i+1), customizations.get(i).writeToConfig());
-
-			writer.write(GSON.toJson(obj));
+		try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {			
+			writer.write(writeToString(writeDefaults));
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String writeToString() {
+		try {
+			return writeToString(false);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	private static String writeToString(boolean writeDefaults) {
+		JsonObject obj = new JsonObject();
+
+		obj.addProperty("Show Tips", writeDefaults ? true : showTips);
+		
+		obj.addProperty("Debug Mode", writeDefaults ? DebugMode.OFF.name() : debugMode.name());
+		
+		ArrayList<Customization> customizations = CustomizationManager.getAllCustomizations();
+		for (int i=0; i<customizations.size(); ++i) 
+			obj.add("Customization "+(i+1), customizations.get(i).writeToConfig());
+		
+		return GSON.toJson(obj);
 	}
 
 }

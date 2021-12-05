@@ -36,8 +36,14 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+	include("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
     // Mod Menu
-    modCompileOnly("com.terraformersmc:modmenu:2.0.14") {
+    modImplementation("com.terraformersmc:modmenu:2.0.14") {
+    	exclude(group: "net.fabricmc.fabric-api")
+    }
+    include("com.terraformersmc:modmenu:2.0.14") {
     	exclude(group: "net.fabricmc.fabric-api")
     }
     // Placeholder API

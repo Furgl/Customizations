@@ -11,7 +11,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 
 public class Customizations implements ModInitializer, ClientModInitializer {
@@ -33,8 +32,6 @@ public class Customizations implements ModInitializer, ClientModInitializer {
 		proxy = new CommonProxy();
 		PacketManager.initServerPackets();
 		FileConfig.init();
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> Customizations.server = server); 
-		ServerLifecycleEvents.SERVER_STOPPED.register(server -> Customizations.server = null);
 	}
 	
 	@Override

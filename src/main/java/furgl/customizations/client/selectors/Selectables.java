@@ -57,8 +57,8 @@ public class Selectables {
 	
 	public static final Set<SelectableTrigger> ALL_TRIGGERS = Sets.newLinkedHashSet();
 	public static final TriggerBreakBlock TRIGGER_BREAK_BLOCK = new TriggerBreakBlock("triggers.breakBlock", new ItemStack(Items.DIAMOND_PICKAXE), (c, ctx) -> new BlockSubCategory(c, ctx).getChildren());
-	public static final TriggerPlayerLogin TRIGGER_PLAYER_LOGIN = new TriggerPlayerLogin("triggers.playerLogin", new ItemStack(Items.FILLED_MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx), new UUIDPart(c, ctx)));
-	public static final TriggerPlayerLogout TRIGGER_PLAYER_LOGOUT = new TriggerPlayerLogout("triggers.playerLogout", new ItemStack(Items.MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx), new UUIDPart(c, ctx)));
+	public static final TriggerPlayerLogin TRIGGER_PLAYER_LOGIN = new TriggerPlayerLogin("triggers.playerLogin", new ItemStack(Items.FILLED_MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx, Selectables.ENTITY_CAUSE), new UUIDPart(c, ctx, Selectables.ENTITY_CAUSE)));
+	public static final TriggerPlayerLogout TRIGGER_PLAYER_LOGOUT = new TriggerPlayerLogout("triggers.playerLogout", new ItemStack(Items.MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx, Selectables.ENTITY_CAUSE), new UUIDPart(c, ctx, Selectables.ENTITY_CAUSE)));
 	//public static final TriggerKillEntity TRIGGER_KILL_ENTITY = new TriggerKillEntity("triggers.killEntity", new ItemStack(Items.DIAMOND_SWORD), (c, ctx) -> Lists.newArrayList(new EntityTypePart(c, ctx)));
 	
 	public static final Set<SelectableCondition> ALL_CONDITIONS = Sets.newLinkedHashSet();

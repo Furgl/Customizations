@@ -11,11 +11,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.common.collect.Lists;
-import com.terraformersmc.modmenu.ModMenu;
 
 import furgl.customizations.client.config.Config;
 import furgl.customizations.client.elements.ConfigElement;
-import furgl.customizations.common.Customizations;
 import furgl.customizations.common.impl.IClothConfigScreen;
 import me.shedaniel.clothconfig2.api.AbstractConfigEntry;
 import me.shedaniel.clothconfig2.api.Expandable;
@@ -102,7 +100,7 @@ public abstract class ClothConfigScreenMixin extends AbstractTabbedConfigScreen 
 
 		// save and reopen config screen
 		((ClothConfigScreen)(Object)this).saveAll(false);
-		Screen screen = ModMenu.getConfigScreen(Customizations.MODID, ((AbstractConfigScreenAccessor)this).getParent());
+		Screen screen = Config.createConfigScreen(((AbstractConfigScreenAccessor)this).getParent(), Config.editingServerConfig);
 		MinecraftClient.getInstance().openScreen(screen);
 
 		if (screen instanceof ClothConfigScreen) {
