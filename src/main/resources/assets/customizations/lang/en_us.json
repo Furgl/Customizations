@@ -1,13 +1,15 @@
 {
+	"example.customizations.translation": "Test",
+	
 	"config.customizations.name": "Customizations",
-	"config.customizations.category.customizations": "Customizations",
-	"config.customizations.category.general": "General",
 	"config.customizations.addButton.tooltip": "Add ",
 	"config.customizations.duplicate": "Duplicate name",
-	"config.customizations.customizations.instance.name": "Customization",
- 	"config.customizations.customizations.name": "Customizations",
+ 	"config.customizations.placeholders.tooltip": "Supported placeholders: ",
+ 	
+ 	"config.customizations.category.customizations": "Customizations",
+	"config.customizations.category.general": "General",
 	
-	"config.customizations.tips.showTips": "Show tips in this Config?",
+	"config.customizations.tips.showTips": "Show tips?",
 	"config.customizations.tips.addCustomization": "Start by clicking the + sign below to add a Customization\nThen click to expand the Customization and add Triggers, Conditions, and Actions for it",
 	"config.customizations.tips.lists": "Lists like these can be used to add, remove, and rename sections",
 	"config.customizations.tips.customizationNeeds": "Each Customization needs at least 1 Trigger and 1 Action",
@@ -20,6 +22,9 @@
 	"config.customizations.debugMode.basic.tooltip": "Logs when Customizations are activated",
 	"config.customizations.debugMode.detailed.name": "Detailed",
 	"config.customizations.debugMode.detailed.tooltip": "Logs when Customizations are triggered, tested, and activated",
+
+	"config.customizations.customizations.instance.name": "Customization",
+ 	"config.customizations.customizations.name": "Customizations",
 	
 	"config.customizations.triggerSelector.name": "Type",
 	"config.customizations.triggerSelector.tooltip": "When should this Customization activate?",
@@ -27,9 +32,13 @@
 	"config.customizations.triggers.tooltip": "Triggers control when this Customization activates",
 	"config.customizations.triggers.instance.name": "Trigger",
 	"config.customizations.triggers.breakBlock.name": "Break Block",
-	"config.customizations.triggers.breakBlock.tooltip": "Triggers when a block is broken",
+	"config.customizations.triggers.breakBlock.tooltip": "When a block is broken",
 	"config.customizations.triggers.killEntity.name": "Kill Entity",
-	"config.customizations.triggers.killEntity.tooltip": "Triggers when an entity is killed",
+	"config.customizations.triggers.killEntity.tooltip": "When an entity is killed",
+	"config.customizations.triggers.playerLogin.name": "Player Login",
+	"config.customizations.triggers.playerLogin.tooltip": "When a player logs in",
+	"config.customizations.triggers.playerLogout.name": "Player Logout",
+	"config.customizations.triggers.playerLogout.tooltip": "When a player logs out",
 	
 	"config.customizations.conditionSelector.name": "Type",
 	"config.customizations.conditionSelector.tooltip": "Under what conditions should this Customization activate?",

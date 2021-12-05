@@ -20,10 +20,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "furgl.customizations.Customizations"
+        "furgl.customizations.common.Customizations"
+    ],
+    "client": [
+    	"furgl.customizations.common.Customizations"
     ],
     "modmenu": [
-        "furgl.customizations.config.Config"
+        "furgl.customizations.client.config.Config"
     ]
   },
   "mixins": [
@@ -37,6 +40,6 @@
     "java": ">=16"
   },
   "suggests": {
-    "another-mod": "*"
+    "placeholder-api": "*"
   }
 }

@@ -1,10 +1,12 @@
 {
 	"required": true,
 	"minVersion": "0.8",
-	"package": "furgl.customizations.mixin",
+	"package": "furgl.customizations.common.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 		"triggers.ServerPlayerInteractionManagerMixin",
+		"triggers.PlayerManagerMixin",
+		"triggers.ServerPlayNetworkHandlerMixin",
 		"WorldAccessor"
 	],
 	"client": [
@@ -15,7 +17,8 @@
 	"AbstractConfigListEntryMixin",
 	"DropdownBoxEntryMixin",
 	"DropdownBoxEntryAccessor",
-	"TextFieldWidgetMixin"
+	"TextFieldWidgetMixin",
+	"TextFieldListEntryMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

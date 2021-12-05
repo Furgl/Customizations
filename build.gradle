@@ -7,7 +7,7 @@ sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = "Customizations"
-version = "Fabric-1.17.1-1.2.0"
+version = "Fabric-1.17.1-1.0.0"
 group ="furgl.customizations"
 
 repositories {
@@ -15,11 +15,14 @@ repositories {
 	maven { 
 		url = "https://maven.shedaniel.me/" 
 	}
-	
 	// Mod Menu
 	maven {
 		name = "TerraformersMC"
 		url = "https://maven.terraformersmc.com/"
+	}
+	// Placeholder API
+	maven { 
+		url "https://maven.nucleoid.xyz/" 
 	}
 }
 
@@ -27,19 +30,18 @@ dependencies {
     minecraft "com.mojang:minecraft:1.17.1"
     mappings "net.fabricmc:yarn:1.17.1+build.1:v2"
     modImplementation "net.fabricmc:fabric-loader:0.11.6"
-            
     // Fabric api
     modImplementation "net.fabricmc.fabric-api:fabric-api:0.36.1+1.17"
-
 	// Cloth Config
 	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    
     // Mod Menu
     modCompileOnly("com.terraformersmc:modmenu:2.0.14") {
     	exclude(group: "net.fabricmc.fabric-api")
     }
+    // Placeholder API
+    modImplementation include("eu.pb4:placeholder-api:1.1.3+1.17.1")
 }
 
 processResources {
