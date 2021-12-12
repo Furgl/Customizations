@@ -7,13 +7,13 @@ import com.google.common.collect.Lists;
 import furgl.customizations.client.elements.ConfigElement;
 import furgl.customizations.client.selectors.EntitySelector;
 import furgl.customizations.common.customizations.Customization;
-import furgl.customizations.common.customizations.context.ContextHolder;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
 
 public class EntitySubCategory extends SubCategory {
 
-	private ContextHolder contextHolder;
+	private ConfigContextHolder contextHolder;
 
-	public EntitySubCategory(Customization customization, ContextHolder contextHolder) {
+	public EntitySubCategory(Customization customization, ConfigContextHolder contextHolder) {
 		super("entity", customization);
 		this.contextHolder = contextHolder;
 	}

@@ -11,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import furgl.customizations.client.selectors.Selectable;
-import furgl.customizations.client.selectors.Selectables;
 import furgl.customizations.common.Customizations;
+import furgl.customizations.common.customizations.selectables.Selectable;
+import furgl.customizations.common.customizations.selectables.Selectables;
 import furgl.customizations.common.mixin.WorldAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -128,18 +128,18 @@ public class SelectedEntityContext extends Context {
 	}
 
 	@Override
-	public boolean test(Context... eventContexts) {
-		this.selectedEntities = getEntity(eventContexts);
+	public boolean test(Context... ctxs) {
+		this.selectedEntities = getEntity(ctxs);
 		return !this.selectedEntities.isEmpty();
 	}	
 
 	/**Get entity from these contexts*/
-	public Set<Entity> getEntity(Context[] eventContexts) {
-		World world = Contexts.get(Contexts.CAUSE_WORLD, eventContexts).map(context -> context.getWorld().orElse(null)).orElse(null);
-		if (this.type == Selectables.ENTITY_CAUSE) 
-			return Contexts.get(Contexts.CAUSE_ENTITY, eventContexts).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
+	public Set<Entity> getEntity(Context[] ctxs) {
+		World world = Contexts.get(Contexts.CAUSE_WORLD, ctxs).map(context -> context.getWorld().orElse(null)).orElse(null);
+		if (this.type == Selectables.ENTITY_CAUSE)
+			return Contexts.get(Contexts.CAUSE_ENTITY, ctxs).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
 		else if (this.type == Selectables.ENTITY_TARGET)
-			return Contexts.get(Contexts.TARGET_ENTITY, eventContexts).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.TARGET_ENTITY, ctxs).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
 		else if (this.type == Selectables.ENTITY_SPECIFIC)
 			return this.getEntity(world, this.uuid, -1, this.playerName);
 		else if (this.type == Selectables.ENTITY_NEAREST)
@@ -150,7 +150,7 @@ public class SelectedEntityContext extends Context {
 	}
 
 	/**Get entity based on these parameters*/
-	public Set<Entity> getEntity(@Nullable World worldIn, @Nullable UUID uuid, int id, @Nullable String playerName) {
+	public Set<Entity> getEntity(@Nullable World worldIn, @Nullable UUID uuid, int id, @Nullable String playerName) {		
 		Entity entity = null;
 		// player name
 		if (entity == null && playerName != null && !playerName.isEmpty() && Customizations.server != null) 
@@ -174,7 +174,9 @@ public class SelectedEntityContext extends Context {
 			}
 		}
 
-		if (entity == null)
+		if (entity == null || // entity not found
+				(this.uuid != null && !entity.getUuid().equals(this.uuid)) || // entity's uuid doesn't match
+				(this.playerName != null && !this.playerName.isEmpty() && !this.playerName.equalsIgnoreCase(entity.getEntityName()))) // player's name doesn't match
 			return Sets.newHashSet();
 		else
 			return Sets.newHashSet(entity);

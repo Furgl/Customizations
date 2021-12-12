@@ -1,4 +1,4 @@
-package furgl.customizations.client.selectors;
+package furgl.customizations.common.customizations.selectables;
 
 import java.util.Set;
 
@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import furgl.customizations.client.parts.ChatMessagePart;
 import furgl.customizations.client.parts.CommandPart;
 import furgl.customizations.client.parts.ConsoleMessagePart;
 import furgl.customizations.client.parts.DimensionPart;
@@ -23,19 +24,17 @@ import furgl.customizations.client.subCategories.EntitySubCategory;
 import furgl.customizations.client.subCategories.PositionSubCategory;
 import furgl.customizations.common.customizations.actions.ConsoleMessageAction;
 import furgl.customizations.common.customizations.actions.HealOrDamageEntityAction;
+import furgl.customizations.common.customizations.actions.MessagePlayerAction;
 import furgl.customizations.common.customizations.actions.PlayerCommandAction;
-import furgl.customizations.common.customizations.actions.SelectableAction;
 import furgl.customizations.common.customizations.actions.ServerCommandAction;
-import furgl.customizations.common.customizations.conditions.SelectableCondition;
-import furgl.customizations.common.customizations.triggers.SelectableTrigger;
-import furgl.customizations.common.customizations.triggers.TriggerBreakBlock;
-import furgl.customizations.common.customizations.triggers.TriggerPlayerLogin;
-import furgl.customizations.common.customizations.triggers.TriggerPlayerLogout;
+import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.impl.BlockAndLocation;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class Selectables {
 
@@ -56,9 +55,9 @@ public class Selectables {
 	public static final Selectable POSITION_FIXED = new Selectable("position.fixed", new ItemStack(Blocks.IRON_BLOCK), (c, ctx) -> Lists.newArrayList(new PositionPart(c, ctx), new DimensionPart(c, ctx)));
 	
 	public static final Set<SelectableTrigger> ALL_TRIGGERS = Sets.newLinkedHashSet();
-	public static final TriggerBreakBlock TRIGGER_BREAK_BLOCK = new TriggerBreakBlock("triggers.breakBlock", new ItemStack(Items.DIAMOND_PICKAXE), (c, ctx) -> new BlockSubCategory(c, ctx).getChildren());
-	public static final TriggerPlayerLogin TRIGGER_PLAYER_LOGIN = new TriggerPlayerLogin("triggers.playerLogin", new ItemStack(Items.FILLED_MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx, Selectables.ENTITY_CAUSE), new UUIDPart(c, ctx, Selectables.ENTITY_CAUSE)));
-	public static final TriggerPlayerLogout TRIGGER_PLAYER_LOGOUT = new TriggerPlayerLogout("triggers.playerLogout", new ItemStack(Items.MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx, Selectables.ENTITY_CAUSE), new UUIDPart(c, ctx, Selectables.ENTITY_CAUSE)));
+	public static final SelectableTrigger TRIGGER_BREAK_BLOCK = new SelectableTrigger(ServerPlayerEntity.class, BlockAndLocation.class, new Class[0], "triggers.breakBlock", new ItemStack(Items.DIAMOND_PICKAXE), (c, ctx) -> new BlockSubCategory(c, ctx).getChildren());
+	public static final SelectableTrigger TRIGGER_PLAYER_LOGIN = new SelectableTrigger(ServerPlayerEntity.class, null, new Class[0], "triggers.playerLogin", new ItemStack(Items.FILLED_MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx, Selectables.ENTITY_CAUSE), new UUIDPart(c, ctx, Selectables.ENTITY_CAUSE)));
+	public static final SelectableTrigger TRIGGER_PLAYER_LOGOUT = new SelectableTrigger(ServerPlayerEntity.class, null, new Object[] {Contexts.DISCONNECT_REASON}, "triggers.playerLogout", new ItemStack(Items.MAP), (c, ctx) -> Lists.newArrayList(new PlayerNamePart(c, ctx, Selectables.ENTITY_CAUSE), new UUIDPart(c, ctx, Selectables.ENTITY_CAUSE)));
 	//public static final TriggerKillEntity TRIGGER_KILL_ENTITY = new TriggerKillEntity("triggers.killEntity", new ItemStack(Items.DIAMOND_SWORD), (c, ctx) -> Lists.newArrayList(new EntityTypePart(c, ctx)));
 	
 	public static final Set<SelectableCondition> ALL_CONDITIONS = Sets.newLinkedHashSet();
@@ -69,7 +68,8 @@ public class Selectables {
 	public static final SelectableAction ACTION_PLAYER_COMMAND = new PlayerCommandAction("actions.playerCommand", new ItemStack(Blocks.REPEATING_COMMAND_BLOCK), (c, ctx) -> Lists.newArrayList(new CommandPart(c, ctx), new EntitySubCategory(c, ctx)));
 	public static final SelectableAction ACTION_SERVER_COMMAND = new ServerCommandAction("actions.serverCommand", new ItemStack(Items.COMMAND_BLOCK), (c, ctx) -> Lists.newArrayList(new CommandPart(c, ctx)));
 	public static final SelectableAction ACTION_HEAL_OR_DAMAGE = new HealOrDamageEntityAction("actions.healOrDamage", PotionUtil.setPotion(new ItemStack(Items.POTION), Potions.STRONG_HEALING), (c, ctx) -> Lists.newArrayList(new HealOrDamagePart(c, ctx), new EntitySubCategory(c, ctx)));
-
+	public static final SelectableAction ACTION_MESSAGE_PLAYER = new MessagePlayerAction("actions.messagePlayer", new ItemStack(Items.AZALEA), (c, ctx) -> Lists.newArrayList(new ChatMessagePart(c, ctx), new EntitySubCategory(c, ctx)));
+	
 	@Nullable
 	public static Selectable getTypeByID(String id) {
 		for (Selectable type : ALL_SELECTABLES)

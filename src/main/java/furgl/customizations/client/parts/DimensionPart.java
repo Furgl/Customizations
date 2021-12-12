@@ -14,8 +14,8 @@ import furgl.customizations.client.config.ConfigHelper;
 import furgl.customizations.common.Customizations;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
 import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
@@ -59,7 +59,7 @@ public class DimensionPart extends Part {
 		}
 	}
 
-	public DimensionPart(Customization customization, ContextHolder contextHolder) {
+	public DimensionPart(Customization customization, ConfigContextHolder contextHolder) {
 		super("dimension", customization, contextHolder);
 	}
 

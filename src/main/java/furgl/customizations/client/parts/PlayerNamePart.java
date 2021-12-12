@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.client.config.ConfigHelper;
-import furgl.customizations.client.selectors.Selectable;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
 import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.selectables.Selectable;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 
@@ -21,11 +21,11 @@ public class PlayerNamePart extends Part {
 	@Nullable
 	private Selectable target;
 
-	public PlayerNamePart(Customization customization, ContextHolder contextHolder) {
+	public PlayerNamePart(Customization customization, ConfigContextHolder contextHolder) {
 		this(customization, contextHolder, null);
 	}
 	
-	public PlayerNamePart(Customization customization, ContextHolder contextHolder, @Nullable Selectable target) {
+	public PlayerNamePart(Customization customization, ConfigContextHolder contextHolder, @Nullable Selectable target) {
 		super("playerName", customization, contextHolder);
 		this.target = target;
 	}
@@ -42,7 +42,8 @@ public class PlayerNamePart extends Part {
 		this.mainConfigEntry = ConfigHelper.createStrField(builder, this.getName(), 
 				this.contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).playerName,
 				value -> this.contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).playerName = value,
-				this.getTooltip());
+				this.getTooltip())
+				.build();
 		return Lists.newArrayList(this.mainConfigEntry);
 	}
 

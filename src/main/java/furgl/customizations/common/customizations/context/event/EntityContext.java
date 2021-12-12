@@ -15,24 +15,28 @@ import furgl.customizations.common.mixin.WorldAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public abstract class EntityContext extends EventContext {
+public class EntityContext extends EventContext {
 
 	@Nullable
 	public UUID uuid;
 	public int id = -1;
 
-	public EntityContext(Entity entity) {
-		this(entity == null ? null : entity.getUuid(), entity == null ? 0 : entity.getId());
+	public EntityContext(Type type, Entity entity) {
+		this(type, entity == null ? null : entity.getUuid(), entity == null ? 0 : entity.getId());
 	}
 
-	public EntityContext(UUID uuid, int id) {
-		this();
+	public EntityContext(Type type, UUID uuid, int id) {
+		this(type);
 		this.uuid = uuid;
 		this.id  = id;
 	}
-
+	
 	public EntityContext() {
-		super();
+		this(null);
+	}
+
+	public EntityContext(Type type) {
+		super(type);
 		this.variables.add(new Context.Variable("UUID", 
 				() -> this.uuid, 
 				value -> this.uuid = (UUID) value,
@@ -51,16 +55,14 @@ public abstract class EntityContext extends EventContext {
 				value -> value.toString(), 
 				value -> Integer.valueOf((String) value)));
 	}
-	
-	public abstract String getPlaceholderBase();
-	
+
 	@Override
 	protected Map<String, Function<Context[], String>> createPlaceholders() {
 		Map<String, Function<Context[], String>> map = Maps.newLinkedHashMap();
-		map.put(getPlaceholderBase()+"_entity_name", eventContexts -> getEntity().map(entity -> entity.getEntityName()).orElse("No entity found"));
-		map.put(getPlaceholderBase()+"_entity_pos_x", eventContexts -> getEntity().map(entity -> String.valueOf(entity.getPos().x)).orElse("No entity found"));
-		map.put(getPlaceholderBase()+"_entity_pos_y", eventContexts -> getEntity().map(entity -> String.valueOf(entity.getPos().y)).orElse("No entity found"));
-		map.put(getPlaceholderBase()+"_entity_pos_z", eventContexts -> getEntity().map(entity -> String.valueOf(entity.getPos().z)).orElse("No entity found"));
+		map.put(addPlaceholderBase("entity_name"), eventContexts -> getEntity().map(entity -> entity.getEntityName()).orElse("No entity found"));
+		map.put(addPlaceholderBase("entity_pos_x"), eventContexts -> getEntity().map(entity -> String.valueOf(entity.getPos().x)).orElse("No entity found"));
+		map.put(addPlaceholderBase("entity_pos_y"), eventContexts -> getEntity().map(entity -> String.valueOf(entity.getPos().y)).orElse("No entity found"));
+		map.put(addPlaceholderBase("entity_pos_z"), eventContexts -> getEntity().map(entity -> String.valueOf(entity.getPos().z)).orElse("No entity found"));
 		return map;
 	}
 	
@@ -75,31 +77,6 @@ public abstract class EntityContext extends EventContext {
 			}
 		}
 		return entity == null ? Optional.empty() : Optional.of(entity);
-	}
-	
-	public static class EntityCauseContext extends EntityContext {
-		public EntityCauseContext(Entity entity) {
-			super(entity);
-		}
-		public EntityCauseContext() {
-			super();
-		}
-		@Override
-		public String getPlaceholderBase() {
-			return "cause";
-		}
-	}
-	public static class EntityTargetContext extends EntityContext {
-		public EntityTargetContext(Entity entity) {
-			super(entity);
-		}
-		public EntityTargetContext() {
-			super();
-		}
-		@Override
-		public String getPlaceholderBase() {
-			return "target";
-		}
 	}
 
 }

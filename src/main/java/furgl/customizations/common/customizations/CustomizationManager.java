@@ -2,7 +2,6 @@ package furgl.customizations.common.customizations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -13,7 +12,10 @@ import furgl.customizations.common.config.FileConfig.DebugMode;
 import furgl.customizations.common.customizations.actions.Action;
 import furgl.customizations.common.customizations.conditions.Condition;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.triggers.SelectableTrigger;
+import furgl.customizations.common.customizations.context.holders.Cause;
+import furgl.customizations.common.customizations.context.holders.Other;
+import furgl.customizations.common.customizations.context.holders.Target;
+import furgl.customizations.common.customizations.selectables.SelectableTrigger;
 import furgl.customizations.common.customizations.triggers.Trigger;
 
 public class CustomizationManager {
@@ -21,16 +23,13 @@ public class CustomizationManager {
 	private static ArrayList<Customization> customizations = Lists.newArrayList();
 
 	/**Trigger this trigger with these contexts*/
-	public static void trigger(SelectableTrigger type, Object... contexts) {
+	public static void trigger(SelectableTrigger type, Cause cause, Target target, Other other) { 
 		// only trigger on server
 		if (Customizations.server != null && !Customizations.server.getOverworld().isClient) {
-			// read in contexts
 			List<Context> list = Lists.newArrayList();
-			for (Object obj : contexts)
-				if (obj instanceof Context)
-					list.add((Context) obj);
-				else if (obj instanceof Collection)
-					list.addAll((Collection<? extends Context>) obj);
+			list.addAll(cause.getContext());
+			list.addAll(target.getContext());
+			list.addAll(other.getContext());
 			Context[] eventContexts = list.toArray(new Context[0]);
 			customizations.stream()
 			// trigger type + context

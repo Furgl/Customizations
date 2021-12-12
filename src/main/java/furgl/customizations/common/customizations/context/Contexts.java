@@ -7,15 +7,12 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Sets;
 
+import furgl.customizations.common.customizations.context.Context.Type;
 import furgl.customizations.common.customizations.context.event.DisconnectReasonContext;
-import furgl.customizations.common.customizations.context.event.EntityContext.EntityCauseContext;
-import furgl.customizations.common.customizations.context.event.EntityContext.EntityTargetContext;
-import furgl.customizations.common.customizations.context.event.LocationContext.LocationCauseContext;
-import furgl.customizations.common.customizations.context.event.LocationContext.LocationTargetContext;
-import furgl.customizations.common.customizations.context.event.PlayerContext.PlayerCauseContext;
-import furgl.customizations.common.customizations.context.event.PlayerContext.PlayerTargetContext;
-import furgl.customizations.common.customizations.context.event.WorldContext.WorldCauseContext;
-import furgl.customizations.common.customizations.context.event.WorldContext.WorldTargetContext;
+import furgl.customizations.common.customizations.context.event.EntityContext;
+import furgl.customizations.common.customizations.context.event.LocationContext;
+import furgl.customizations.common.customizations.context.event.PlayerContext;
+import furgl.customizations.common.customizations.context.event.WorldContext;
 import net.minecraft.block.Blocks;
 
 public class Contexts {
@@ -23,18 +20,24 @@ public class Contexts {
 	public static final HashSet<Context> ALL_CONTEXTS = Sets.newHashSet();
 	
 	// cause
-	public static final EntityCauseContext CAUSE_ENTITY = new EntityCauseContext();
-	public static final PlayerCauseContext CAUSE_PLAYER = new PlayerCauseContext();
-	public static final LocationCauseContext CAUSE_LOCATION = new LocationCauseContext();
-	public static final WorldCauseContext CAUSE_WORLD = new WorldCauseContext();
+	public static final EntityContext CAUSE_ENTITY = new EntityContext(Type.CAUSE);
+	public static final PlayerContext CAUSE_PLAYER = new PlayerContext(Type.CAUSE);
+	public static final LocationContext CAUSE_LOCATION = new LocationContext(Type.CAUSE);
+	public static final WorldContext CAUSE_WORLD = new WorldContext(Type.CAUSE);
 	// target
-	public static final EntityTargetContext TARGET_ENTITY = new EntityTargetContext();
-	public static final PlayerTargetContext TARGET_PLAYER = new PlayerTargetContext();
-	public static final LocationTargetContext TARGET_LOCATION = new LocationTargetContext();
-	public static final WorldTargetContext TARGET_WORLD = new WorldTargetContext();
+	public static final EntityContext TARGET_ENTITY = new EntityContext(Type.TARGET);
+	public static final PlayerContext TARGET_PLAYER = new PlayerContext(Type.TARGET);
+	public static final LocationContext TARGET_LOCATION = new LocationContext(Type.TARGET);
+	public static final WorldContext TARGET_WORLD = new WorldContext(Type.TARGET);
+	// subject
+	public static final EntityContext SUBJECT_ENTITY = new EntityContext(Type.SUBJECT);
+	public static final PlayerContext SUBJECT_PLAYER = new PlayerContext(Type.SUBJECT);
+	public static final LocationContext SUBJECT_LOCATION = new LocationContext(Type.SUBJECT);
+	public static final WorldContext SUBJECT_WORLD = new WorldContext(Type.SUBJECT);
 	// other
-	public static final BlockContext BLOCK = new BlockContext(Blocks.AIR);
+	public static final BlockContext BLOCK = new BlockContext(null, Blocks.AIR);
 	public static final ConsoleMessageContext CONSOLE_MESSAGE = new ConsoleMessageContext("");
+	public static final ChatMessageContext CHAT_MESSAGE = new ChatMessageContext("");
 	public static final RandomContext RANDOM = new RandomContext();
 	public static final CommandContext COMMAND = new CommandContext("");
 	public static final HealOrDamageContext HEAL_OR_DAMAGE_AMOUNT = new HealOrDamageContext(0, 0);

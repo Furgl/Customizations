@@ -7,13 +7,13 @@ import com.google.common.collect.Lists;
 import furgl.customizations.client.elements.ConfigElement;
 import furgl.customizations.client.parts.BlockPart;
 import furgl.customizations.common.customizations.Customization;
-import furgl.customizations.common.customizations.context.ContextHolder;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
 
 public class BlockSubCategory extends SubCategory {
 
-	private ContextHolder contextHolder;
+	private ConfigContextHolder contextHolder;
 
-	public BlockSubCategory(Customization customization, ContextHolder contextHolder) {
+	public BlockSubCategory(Customization customization, ConfigContextHolder contextHolder) {
 		super("block", customization);
 		this.contextHolder = contextHolder;
 	}

@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Lists;
 
-import furgl.customizations.client.selectors.Selectable;
 import furgl.customizations.common.Customizations;
 import furgl.customizations.common.config.FileConfig;
+import furgl.customizations.common.customizations.Customization;
+import furgl.customizations.common.customizations.selectables.Selectable;
 import furgl.customizations.common.impl.IAbstractConfigScreen;
 import me.shedaniel.clothconfig2.api.AbstractConfigEntry;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -24,10 +26,12 @@ import me.shedaniel.clothconfig2.gui.entries.StringListEntry;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.gui.entries.TextListEntry;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
+import me.shedaniel.clothconfig2.impl.builders.StringFieldBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import me.shedaniel.math.Point;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
@@ -94,24 +98,39 @@ public class ConfigHelper {
 			return null;
 	}
 
+	public static StringFieldBuilder createStrField(ConfigBuilder builder, Text name, String value, Consumer<String> saveConsumer, @Nullable MutableText tooltip) {
+		return createStrField(builder, name, value, saveConsumer, tooltip, false, null);
+	}
+
 	@SuppressWarnings("deprecation")
-	public static StringListEntry createStrField(ConfigBuilder builder, Text name, String value, Consumer<String> saveConsumer, @Nullable Text tooltip){
-		StringListEntry entry = new StringListEntry(name, value, RESET_BUTTON, null, saveConsumer, null, false) {
-			@Override
-			public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isHovered, float delta) {
-				super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
-				// draw tooltip
-				if (isMouseInside(mouseX, mouseY, x, y, entryWidth, entryHeight) && MinecraftClient.getInstance().currentScreen instanceof IAbstractConfigScreen) {
-					// show value if text field hovered
-					if (this.textFieldWidget.isMouseOver(mouseX, mouseY) && !this.getValue().isEmpty())
-						((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), Text.of(this.getValue())));
-					// show tooltip if not hovering over text field
-					else if (tooltip != null) 
-						((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), tooltip));
-				}
-			}
-		};
-		return entry;
+	public static StringFieldBuilder createStrField(ConfigBuilder builder, Text name, String value, Consumer<String> saveConsumer, @Nullable MutableText tooltip, boolean supportsPlaceholders, Customization customization) {
+		final Supplier<Text[]> tooltipGetter = 
+				(supportsPlaceholders && customization != null) ? 
+						() -> Screen.hasShiftDown() ? getTooltip(customization.getPlaceholderText()) : getTooltip(tooltip)
+								: () -> getTooltip(tooltip);
+								return new StringFieldBuilder(RESET_BUTTON, name, value) {
+									@NotNull
+									public StringListEntry build() {
+										StringListEntry entry = new StringListEntry(getFieldNameKey(), value, getResetButtonKey(), this.defaultValue, saveConsumer, null, isRequireRestart()) {
+											@Override
+											public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isHovered, float delta) {
+												super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
+												// draw tooltip
+												if (isMouseInside(mouseX, mouseY, x, y, entryWidth, entryHeight) && MinecraftClient.getInstance().currentScreen instanceof IAbstractConfigScreen) {
+													// show value if text field hovered
+													if (this.textFieldWidget.isMouseOver(mouseX, mouseY) && !this.getValue().isEmpty())
+														((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), Text.of(this.getValue())));
+													// show tooltip if not hovering over text field
+													else if (tooltip != null) 
+														((IAbstractConfigScreen)MinecraftClient.getInstance().currentScreen).setTooltip(Tooltip.of(new Point(mouseX, mouseY), tooltipGetter.get()));
+												}
+											}
+										};
+										if (this.errorSupplier != null)
+											entry.setErrorSupplier(() -> (Optional)this.errorSupplier.apply(entry.getValue())); 
+										return entry;
+									}
+								};
 	}
 
 	public static SubCategoryBuilder createSubCategory(ConfigBuilder builder, Text name, List<AbstractConfigListEntry> children, boolean expanded) {
@@ -264,9 +283,17 @@ public class ConfigHelper {
 
 	@Nullable
 	private static Text[] getTooltip(Object value) {
-		if (value instanceof Selectable) {
+		String str = null;
+		if (value instanceof String)
+			str = (String) value;
+		else if (value instanceof Text)
+			str = ((Text) value).getString();
+		else if (value instanceof Selectable) 
+			str = ((Selectable)value).getTooltip().getString();
+
+		if (str != null) {
 			List<Text> list = Lists.newArrayList();
-			for (String line : ((Selectable)value).getTooltip().getString().split("\n"))
+			for (String line : str.split("\n"))
 				list.add(Text.of(line));
 			return list.toArray(new Text[0]);
 		}

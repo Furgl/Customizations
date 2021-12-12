@@ -14,17 +14,21 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 
-public abstract class WorldContext extends EventContext {
+public class WorldContext extends EventContext {
 
 	public Identifier identifier;
 
-	public WorldContext(World world) {
-		this();
+	public WorldContext(Type type, World world) {
+		this(type);
 		this.identifier = world == null ? null : world.getRegistryKey().getValue();
 	}
-
+	
 	public WorldContext() {
-		super();
+		this(null);
+	}
+
+	public WorldContext(Type type) {
+		super(type);
 		this.variables.add(new Context.Variable("World", 
 				() -> this.identifier, 
 				value -> this.identifier = (Identifier) value,
@@ -44,43 +48,16 @@ public abstract class WorldContext extends EventContext {
 		else
 			return Optional.of(world);
 	}	
-	
-	protected abstract String getPlaceholderBase();
-	
+		
 	@Override
 	protected Map<String, Function<Context[], String>> createPlaceholders() {
 		Map<String, Function<Context[], String>> map = Maps.newLinkedHashMap();
-		map.put(getPlaceholderBase()+"_world_name", eventContexts -> this.identifier.toString());
-		map.put(getPlaceholderBase()+"_world_time", eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getTime())).orElse("0"));
-		map.put(getPlaceholderBase()+"_world_spawn_x", eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getSpawnX())).orElse("0"));
-		map.put(getPlaceholderBase()+"_world_spawn_y", eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getSpawnY())).orElse("0"));
-		map.put(getPlaceholderBase()+"_world_spawn_z", eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getSpawnZ())).orElse("0"));
+		map.put(addPlaceholderBase("world_name"), eventContexts -> this.identifier.toString());
+		map.put(addPlaceholderBase("world_time"), eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getTime())).orElse("0"));
+		map.put(addPlaceholderBase("world_spawn_x"), eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getSpawnX())).orElse("0"));
+		map.put(addPlaceholderBase("world_spawn_y"), eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getSpawnY())).orElse("0"));
+		map.put(addPlaceholderBase("world_spawn_z"), eventContexts -> this.getWorld().map(world -> String.valueOf(world.getLevelProperties().getSpawnZ())).orElse("0"));
 		return map;
-	}
-
-	public static class WorldCauseContext extends WorldContext {
-		public WorldCauseContext(World world) {
-			super(world);
-		}
-		public WorldCauseContext() {
-			super();
-		}
-		@Override
-		protected String getPlaceholderBase() {
-			return "cause";
-		}
-	}
-	public static class WorldTargetContext extends WorldContext {
-		public WorldTargetContext(World world) {
-			super(world);
-		}
-		public WorldTargetContext() {
-			super();
-		}
-		@Override
-		protected String getPlaceholderBase() {
-			return "target";
-		}
 	}
 
 }

@@ -6,12 +6,14 @@ import com.google.common.collect.Lists;
 
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
 import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.selectables.Selectable;
+import furgl.customizations.common.customizations.selectables.Selectables;
 
 public class PositionSelector<T extends Selectable> extends Selector {
 
-	public PositionSelector(Customization customization, ContextHolder contextHolder) {
+	public PositionSelector(Customization customization, ConfigContextHolder contextHolder) {
 		super("position", customization, contextHolder, contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).positionType, 
 				Lists.newArrayList(
 						Selectables.POSITION_CAUSE,

@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Lists;
@@ -13,12 +14,33 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.util.Formatting;
+
 public abstract class Context { 
 
+	public enum Type {
+		CAUSE(Formatting.YELLOW), 
+		TARGET(Formatting.RED), 
+		SUBJECT(Formatting.GREEN), 
+		OTHER(Formatting.GRAY);
+		
+		public Formatting formatting;
+
+		private Type(Formatting formatting) {
+			this.formatting = formatting;
+		}
+	}
+	
+	public Type type;
 	private String id;
 	protected ArrayList<Variable> variables = Lists.newArrayList();
 	@Nullable
 	private Map<String, Function<Context[], String>> placeholders;
+	
+	public Context(Type type) {
+		this();
+		this.type = type;
+	}
 	
 	public Context() {
 		this.id = this.getClass().getSimpleName().replace("Context", "");
@@ -70,11 +92,11 @@ public abstract class Context {
 	}
 	
 	/**Test if these event contexts match this context*/
-	public abstract boolean test(Context... eventContexts);
+	public abstract boolean test(Context... ctxs);
 
 	@Override
 	public String toString() {
-		String ret = this.getId();
+		String ret = this.getId()+(this.type == null ? "" : " "+WordUtils.capitalizeFully(this.type.name()));
 		if (!this.variables.isEmpty()) {
 			ret += " {";
 			for (int i=0; i<this.variables.size(); ++i) {
@@ -113,6 +135,11 @@ public abstract class Context {
 	
 	protected Map<String, Function<Context[], String>> createPlaceholders() {
 		return Maps.newLinkedHashMap();
+	}
+	
+	/**Add placeholder base (i.e. "cause") to placeholder*/
+	public String addPlaceholderBase(String placeholder) {
+		return this.type == null ? placeholder : this.type.name().toLowerCase()+"_"+placeholder;
 	}
 	
 }

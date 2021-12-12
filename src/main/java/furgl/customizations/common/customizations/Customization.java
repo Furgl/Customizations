@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 
 import furgl.customizations.common.customizations.actions.Action;
 import furgl.customizations.common.customizations.conditions.Condition;
+import furgl.customizations.common.customizations.context.ContextHelper;
+import furgl.customizations.common.customizations.context.holders.EventContextHolder;
 import furgl.customizations.common.customizations.triggers.Trigger;
 
 public class Customization {
@@ -23,15 +25,26 @@ public class Customization {
 	public Customization(String name) {
 		this.name = name;
 	}
-	
+
+	public String getPlaceholderText() {
+		List<EventContextHolder> holders = Lists.newArrayList();
+		for (Trigger trigger : this.triggers)
+			holders.addAll(trigger.getType().placeholderContextHolders);
+		for (Condition condition : this.conditions)
+			holders.addAll(condition.getType().placeholderContextHolders);
+		for (Action action : this.actions)
+			holders.addAll(action.getType().placeholderContextHolders);
+		return ContextHelper.getPlaceholderText(holders);
+	}
+
 	public List<Trigger> getTriggers() {
 		return this.triggers;
 	}
-	
+
 	public List<Condition> getConditions() {
 		return this.conditions;
 	}
-	
+
 	public List<Action> getActions() {
 		return this.actions;
 	}
@@ -104,7 +117,7 @@ public class Customization {
 		}
 		return customization;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.name+" {Triggers:"+this.getTriggers()+",Conditions:"+this.getConditions()+",Actions:"+this.getActions()+"}";

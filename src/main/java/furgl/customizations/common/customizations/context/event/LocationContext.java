@@ -11,22 +11,26 @@ import furgl.customizations.common.customizations.context.Context;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public abstract class LocationContext extends EventContext {
+public class LocationContext extends EventContext {
 
 	public Vec3d location;
 	
-	public LocationContext(BlockPos location) {
-		this();
+	public LocationContext(Type type, BlockPos location) {
+		this(type);
 		this.location = location == null ? Vec3d.ZERO : new Vec3d(location.getX(), location.getY(), location.getZ());
 	}
 	
-	public LocationContext(Vec3d location) {
-		this();
+	public LocationContext(Type type, Vec3d location) {
+		this(type);
 		this.location = location == null ? Vec3d.ZERO : location;
 	}
 	
 	public LocationContext() {
-		super();
+		this(null);
+	}
+	
+	public LocationContext(Type type) {
+		super(type);
 		this.variables.add(new Context.Variable("Location", 
 				() -> this.location, 
 				value -> this.location = (Vec3d) value,
@@ -46,51 +50,14 @@ public abstract class LocationContext extends EventContext {
 			return null;
 		}
 	}
-	
-	protected abstract String getPlaceholderBase();
-	
+
 	@Override
 	protected Map<String, Function<Context[], String>> createPlaceholders() {
 		Map<String, Function<Context[], String>> map = Maps.newLinkedHashMap();
-		map.put(getPlaceholderBase()+"_pos_x", eventContexts -> String.valueOf(this.location.x));
-		map.put(getPlaceholderBase()+"_pos_y", eventContexts -> String.valueOf(this.location.y));
-		map.put(getPlaceholderBase()+"_pos_z", eventContexts -> String.valueOf(this.location.z));
+		map.put(addPlaceholderBase("pos_x"), eventContexts -> this.location.x == (int) this.location.x ? String.valueOf((int) this.location.x) : String.valueOf(this.location.x));
+		map.put(addPlaceholderBase("pos_y"), eventContexts -> this.location.y == (int) this.location.y ? String.valueOf((int) this.location.y) : String.valueOf(this.location.y));
+		map.put(addPlaceholderBase("pos_z"), eventContexts -> this.location.z == (int) this.location.z ? String.valueOf((int) this.location.z) : String.valueOf(this.location.z));
 		return map;
-	}
-	
-	public static class LocationCauseContext extends LocationContext {
-		public LocationCauseContext(BlockPos location) {
-			super(location);
-		}
-		
-		public LocationCauseContext(Vec3d location) {
-			super(location);
-		}
-		public LocationCauseContext() {
-			super();
-		}
-
-		@Override
-		protected String getPlaceholderBase() {
-			return "cause";
-		}
-	}
-	public static class LocationTargetContext extends LocationContext {
-		public LocationTargetContext(BlockPos location) {
-			super(location);
-		}
-		
-		public LocationTargetContext(Vec3d location) {
-			super(location);
-		}
-		public LocationTargetContext() {
-			super();
-		}
-
-		@Override
-		protected String getPlaceholderBase() {
-			return "target";
-		}
 	}
 	
 }

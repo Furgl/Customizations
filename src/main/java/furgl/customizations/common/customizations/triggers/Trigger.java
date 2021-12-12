@@ -5,12 +5,12 @@ import java.util.Map.Entry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import furgl.customizations.client.selectors.Selectables;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
 import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.selectables.Selectables;
 
-public class Trigger extends ContextHolder {
+public class Trigger extends ConfigContextHolder {
 
 	public Trigger(String name) {
 		super(name);

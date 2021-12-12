@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.actions.Action;
+import furgl.customizations.common.customizations.selectables.Selectable;
+import furgl.customizations.common.customizations.selectables.Selectables;
 
 public class ActionSelector extends Selector<Selectable> {
 

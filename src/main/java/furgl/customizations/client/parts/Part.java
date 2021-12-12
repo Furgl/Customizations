@@ -8,15 +8,16 @@ import furgl.customizations.client.elements.ConfigElement;
 import furgl.customizations.common.Customizations;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
 public abstract class Part extends ConfigElement {
 	
-	protected ContextHolder contextHolder;
+	protected ConfigContextHolder contextHolder;
 
-	protected Part(String id, @Nullable Customization customization, ContextHolder contextHolder) {
+	protected Part(String id, @Nullable Customization customization, ConfigContextHolder contextHolder) {
 		super(id, customization);
 		this.contextHolder = contextHolder;
 	}
@@ -35,11 +36,11 @@ public abstract class Part extends ConfigElement {
 	}
 	
 	@Override
-	public Text getTooltip() {
+	public MutableText getTooltip() {
 		return getTooltip(null);
 	}
 	
-	public Text getTooltip(@Nullable String str) {
+	public MutableText getTooltip(@Nullable String str) {
 		return new TranslatableText("config."+Customizations.MODID+".part."+this.getId()+(str == null ? "" : "."+str)+".tooltip");
 	}
 

@@ -47,8 +47,10 @@ public class Config implements ModMenuApi {
 				return new WaitingScreen(parent, new TranslatableText("config."+Customizations.MODID+".multiplayerWaitingScreen.waiting"));
 			}
 			// else open single player's config
-			else
+			else {
+				FileConfig.readFromFile();
 				return createConfigScreen(parent, false);
+			}
 		};
 	}
 

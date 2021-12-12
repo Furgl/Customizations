@@ -3,6 +3,8 @@ package furgl.customizations.client.selectors;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.common.customizations.Customization;
+import furgl.customizations.common.customizations.selectables.Selectable;
+import furgl.customizations.common.customizations.selectables.Selectables;
 import furgl.customizations.common.customizations.triggers.Trigger;
 
 public class TriggerSelector extends Selector<Selectable> {

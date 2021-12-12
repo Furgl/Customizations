@@ -7,11 +7,11 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Lists;
 
 import furgl.customizations.client.config.ConfigHelper;
-import furgl.customizations.client.selectors.Selectables;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
 import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.selectables.Selectables;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.block.Blocks;
@@ -21,7 +21,7 @@ import net.minecraft.util.registry.Registry;
 
 public class BlockPart extends Part {
 
-	public BlockPart(Customization customization, ContextHolder contextHolder) {
+	public BlockPart(Customization customization, ConfigContextHolder contextHolder) {
 		super("block", customization, contextHolder);
 	}
 

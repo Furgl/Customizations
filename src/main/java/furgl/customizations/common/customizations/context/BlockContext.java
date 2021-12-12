@@ -14,13 +14,17 @@ public class BlockContext extends Context {
 
 	public Block block = Blocks.AIR;
 
-	public BlockContext(Block block) {
-		this();
+	public BlockContext(Type type, Block block) {
+		this(type);
 		this.block = block;
 	}
-
+	
 	public BlockContext() {
-		super();
+		this((Type) null);
+	}
+
+	public BlockContext(Type type) {
+		super(type);
 		this.variables.add(new Context.Variable("Block", 
 				() -> this.block, 
 				block -> this.block = (Block) block,
@@ -36,7 +40,8 @@ public class BlockContext extends Context {
 	@Override
 	protected Map<String, Function<Context[], String>> createPlaceholders() {
 		Map<String, Function<Context[], String>> map = Maps.newLinkedHashMap();
-		map.put("block_id", eventContexts -> Registry.BLOCK.getId(this.block).toString());
+		map.put(addPlaceholderBase("block_id"), eventContexts -> Registry.BLOCK.getId(this.block).toString());
+		map.put(addPlaceholderBase("block_name"), eventContexts -> this.block.getName().getString());
 		return map;
 	}
 

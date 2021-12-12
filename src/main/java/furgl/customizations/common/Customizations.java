@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import furgl.customizations.client.ClientProxy;
-import furgl.customizations.client.selectors.Selectables;
 import furgl.customizations.common.config.FileConfig;
+import furgl.customizations.common.customizations.selectables.Selectables;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,6 +14,9 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.MinecraftServer;
 
 public class Customizations implements ModInitializer, ClientModInitializer {
+	
+	// TODO resize tooltips if too big?
+	// TODO add tips: see placeholders with shift, can use formatting with &
 
 	public static final String MODNAME = "Customizations";
 	public static final String MODID = "customizations";

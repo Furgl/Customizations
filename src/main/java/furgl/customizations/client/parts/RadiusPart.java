@@ -7,14 +7,14 @@ import com.google.common.collect.Lists;
 
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
 import furgl.customizations.common.customizations.context.Contexts;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 
 public class RadiusPart extends Part {
 
-	public RadiusPart(Customization customization, ContextHolder contextHolder) {
+	public RadiusPart(Customization customization, ConfigContextHolder contextHolder) {
 		super("radius", customization, contextHolder);
 	}
 	

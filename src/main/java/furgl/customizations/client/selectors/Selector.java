@@ -11,7 +11,9 @@ import furgl.customizations.client.config.ConfigHelper;
 import furgl.customizations.client.elements.ConfigElement;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.context.Context;
-import furgl.customizations.common.customizations.context.ContextHolder;
+import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.selectables.Selectable;
+import furgl.customizations.common.customizations.selectables.Selectables;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.text.Text;
@@ -19,14 +21,14 @@ import net.minecraft.text.Text;
 public abstract class Selector<T extends Selectable> extends ConfigElement {
 
 	protected Object previousValue;
-	private ContextHolder contextHolder;
+	private ConfigContextHolder contextHolder;
 	protected T selection;
 	protected Function<String, T> stringToSelection;
 	protected Function<T, Text> selectionToText;
 	private Consumer<T> saveConsumer;
 	private Iterable<T> selections;
 
-	protected Selector(String id, Customization customization, ContextHolder contextHolder, T selection, Iterable<T> selections, 
+	protected Selector(String id, Customization customization, ConfigContextHolder contextHolder, T selection, Iterable<T> selections, 
 			Function<String, T> stringToSelection, Function<T, Text> selectionToText, Consumer<T> saveConsumer) {
 		super(id, customization);
 		this.contextHolder = contextHolder;
