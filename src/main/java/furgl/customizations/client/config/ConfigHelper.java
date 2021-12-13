@@ -104,10 +104,13 @@ public class ConfigHelper {
 
 	@SuppressWarnings("deprecation")
 	public static StringFieldBuilder createStrField(ConfigBuilder builder, Text name, String value, Consumer<String> saveConsumer, @Nullable MutableText tooltip, boolean supportsPlaceholders, Customization customization) {
+		if (supportsPlaceholders && customization != null)
+			tooltip.append("\n").append(new TranslatableText("config."+Customizations.MODID+".placeholders.holdShift", Formatting.DARK_GRAY, Formatting.ITALIC));
 		final Supplier<Text[]> tooltipGetter = 
 				(supportsPlaceholders && customization != null) ? 
-						() -> Screen.hasShiftDown() ? getTooltip(customization.getPlaceholderText()) : getTooltip(tooltip)
+						() -> Screen.hasShiftDown() ? getTooltip(customization.getPlaceholderText()) : getTooltip(tooltip) 
 								: () -> getTooltip(tooltip);
+
 								return new StringFieldBuilder(RESET_BUTTON, name, value) {
 									@NotNull
 									public StringListEntry build() {

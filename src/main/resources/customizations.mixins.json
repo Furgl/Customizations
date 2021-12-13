@@ -18,7 +18,8 @@
 	"DropdownBoxEntryMixin",
 	"DropdownBoxEntryAccessor",
 	"TextFieldWidgetMixin",
-	"TextFieldListEntryMixin"
+	"TextFieldListEntryMixin",
+	"ScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -8,11 +8,14 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import furgl.customizations.common.Customizations;
 import furgl.customizations.common.customizations.actions.Action;
 import furgl.customizations.common.customizations.conditions.Condition;
 import furgl.customizations.common.customizations.context.ContextHelper;
 import furgl.customizations.common.customizations.context.holders.EventContextHolder;
 import furgl.customizations.common.customizations.triggers.Trigger;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class Customization {
 
@@ -34,7 +37,11 @@ public class Customization {
 			holders.addAll(condition.getType().placeholderContextHolders);
 		for (Action action : this.actions)
 			holders.addAll(action.getType().placeholderContextHolders);
-		return ContextHelper.getPlaceholderText(holders);
+		String placeholderText = ContextHelper.getPlaceholderText(holders);
+		if (!placeholderText.isEmpty())
+			placeholderText = Formatting.GOLD + "" + Formatting.UNDERLINE + 
+			new TranslatableText("config." + Customizations.MODID + ".placeholders.tooltip").getString() + "\n" + placeholderText;
+		return placeholderText;
 	}
 
 	public List<Trigger> getTriggers() {

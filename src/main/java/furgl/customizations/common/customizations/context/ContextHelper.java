@@ -17,8 +17,6 @@ import furgl.customizations.common.customizations.context.holders.EventContextHo
 import furgl.customizations.common.customizations.context.holders.Subject;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -94,21 +92,15 @@ public class ContextHelper {
 
 		String tooltip = "";
 		boolean hasPlaceholders = false;
-		String placeholderStr = "";
 		for (String name : map.keySet()) {
 			Set<String> placeholders = map.get(name);
 			// placeholders
 			if (!placeholders.isEmpty()) {
-				placeholderStr += (hasPlaceholders ? "\n\n" : "\n")+name;
+				tooltip += (hasPlaceholders ? "\n\n" : "")+name;
 				for (String placeholder : placeholders)
-					placeholderStr += placeholder;
+					tooltip += placeholder;
 				hasPlaceholders = true;
 			}
-		}
-		if (hasPlaceholders) {
-			tooltip += "\n\n" + Formatting.GOLD + Formatting.UNDERLINE + 
-					new TranslatableText("config." + Customizations.MODID + ".placeholders.tooltip").getString();
-			tooltip += placeholderStr;
 		}
 		return tooltip;
 	}

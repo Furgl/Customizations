@@ -4,6 +4,7 @@
 	"config.customizations.addButton.tooltip": "Add ",
 	"config.customizations.duplicate": "Duplicate name",
  	"config.customizations.placeholders.tooltip": "Placeholders",
+ 	"config.customizations.placeholders.holdShift": "%1$s%2$s<Hold shift to see placeholders>",
  	"config.customizations.multiplayerWaitingScreen.waiting": "Waiting for server...",
  	"config.customizations.multiplayerWaitingScreen.error": "You must be opped in order to edit the server's config",
  	
@@ -14,6 +15,7 @@
 	"config.customizations.tips.addCustomization": "Start by clicking the + sign below to add a Customization\nThen click to expand the Customization and add Triggers, Conditions, and Actions for it",
 	"config.customizations.tips.lists": "Lists like these can be used to add, remove, and rename sections",
 	"config.customizations.tips.customizationNeeds": "Each Customization needs at least 1 Trigger and 1 Action",
+	"config.customizations.tips.placeholders": "Triggers and Actions provide placeholders that can be used in some Actions and will be replaced by their values when the Action is activated",
 	
 	"config.customizations.debugMode.name": "Debug Mode",
 	"config.customizations.debugMode.tooltip": "Debugging to troubleshoot Customizations",
@@ -52,7 +54,7 @@
 	"config.customizations.actionSelector.name": "Type",
 	"config.customizations.actionSelector.tooltip": "What should this Customization do?",
 	"config.customizations.actions.name": "Actions",
-	"config.customizations.actions.tooltip": "Actions control what this Customization does",
+	"config.customizations.actions.tooltip": "Actions control what this Customization does when it activates",
 	"config.customizations.actions.instance.name": "Action",
 	"config.customizations.actions.consoleMessage.name": "Send Console Message",
 	"config.customizations.actions.consoleMessage.tooltip": "Send a message in the console / logs",

@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class Selectable {
 
@@ -48,8 +49,14 @@ public class Selectable {
 	public MutableText getTooltip() {
 		MutableText tooltip = new TranslatableText("config." + Customizations.MODID + "." + this.getId() + ".tooltip");
 		// add placeholders to tooltip
-		if (Screen.hasShiftDown()) 
-			tooltip.append(ContextHelper.getPlaceholderText(this.placeholderContextHolders));
+		if (Screen.hasShiftDown()) {
+			String placeholderText = ContextHelper.getPlaceholderText(this.placeholderContextHolders);
+			if (!placeholderText.isEmpty())
+			tooltip.append("\n\n" + Formatting.GOLD + Formatting.UNDERLINE + 
+						new TranslatableText("config." + Customizations.MODID + ".placeholders.tooltip").getString() + "\n" + placeholderText);
+		}
+		else
+			tooltip = tooltip.append("\n").append(new TranslatableText("config."+Customizations.MODID+".placeholders.holdShift", Formatting.DARK_GRAY, Formatting.ITALIC));
 		return tooltip;
 	}
 

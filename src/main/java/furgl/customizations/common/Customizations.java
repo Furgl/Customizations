@@ -15,9 +15,6 @@ import net.minecraft.server.MinecraftServer;
 
 public class Customizations implements ModInitializer, ClientModInitializer {
 	
-	// TODO resize tooltips if too big?
-	// TODO add tips: see placeholders with shift, can use formatting with &
-
 	public static final String MODNAME = "Customizations";
 	public static final String MODID = "customizations";
 

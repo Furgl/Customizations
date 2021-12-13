@@ -23,7 +23,11 @@ public class TriggerList extends CList {
 	@Override
 	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
 		List<AbstractConfigListEntry> list = Lists.newArrayList();
+		// add tips
 		TextListEntry tip = ConfigHelper.addTip(builder, "customizationNeeds");
+		if (tip != null)
+			list.add(tip);
+		tip = ConfigHelper.addTip(builder, "placeholders");
 		if (tip != null)
 			list.add(tip);
 		list.addAll(super.addToConfig(builder));
