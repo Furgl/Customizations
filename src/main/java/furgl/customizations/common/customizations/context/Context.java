@@ -1,6 +1,7 @@
 package furgl.customizations.common.customizations.context;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -31,6 +32,7 @@ public abstract class Context {
 		}
 	}
 	
+	@Nullable
 	public Type type;
 	private String id;
 	protected ArrayList<Variable> variables = Lists.newArrayList();
@@ -92,7 +94,7 @@ public abstract class Context {
 	}
 	
 	/**Test if these event contexts match this context*/
-	public abstract boolean test(Context... ctxs);
+	public abstract boolean test(Context[] configContexts, Context... eventContexts);
 
 	@Override
 	public String toString() {

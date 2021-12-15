@@ -22,7 +22,7 @@ public abstract class ConfigContextHolder extends ContextHolder {
 	/**Test if this should be activated in this context*/
 	public boolean test(Context... eventContexts) {
 		for (Context customizationContext : this.getContext())
-			if (!customizationContext.test(eventContexts))
+			if (!customizationContext.test(this.getContext().toArray(new Context[0]), eventContexts))
 				return false;
 		return true;
 	}

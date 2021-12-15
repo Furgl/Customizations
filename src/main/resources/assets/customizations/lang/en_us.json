@@ -26,6 +26,9 @@
 	"config.customizations.debugMode.detailed.name": "Detailed",
 	"config.customizations.debugMode.detailed.tooltip": "Logs when Customizations are triggered, tested, and activated",
 
+	"config.customizations.debugVisuals.name": "Debug Visuals",
+	"config.customizations.debugVisuals.tooltip": "Show visuals to indicate Cause, Target, and Subjects for activated Customizations",
+
 	"config.customizations.customizations.instance.name": "Customization",
  	"config.customizations.customizations.name": "Customizations",
 	

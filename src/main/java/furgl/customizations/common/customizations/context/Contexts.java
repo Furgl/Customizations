@@ -19,23 +19,11 @@ public class Contexts {
 
 	public static final HashSet<Context> ALL_CONTEXTS = Sets.newHashSet();
 	
-	// cause
-	public static final EntityContext CAUSE_ENTITY = new EntityContext(Type.CAUSE);
-	public static final PlayerContext CAUSE_PLAYER = new PlayerContext(Type.CAUSE);
-	public static final LocationContext CAUSE_LOCATION = new LocationContext(Type.CAUSE);
-	public static final WorldContext CAUSE_WORLD = new WorldContext(Type.CAUSE);
-	// target
-	public static final EntityContext TARGET_ENTITY = new EntityContext(Type.TARGET);
-	public static final PlayerContext TARGET_PLAYER = new PlayerContext(Type.TARGET);
-	public static final LocationContext TARGET_LOCATION = new LocationContext(Type.TARGET);
-	public static final WorldContext TARGET_WORLD = new WorldContext(Type.TARGET);
-	// subject
-	public static final EntityContext SUBJECT_ENTITY = new EntityContext(Type.SUBJECT);
-	public static final PlayerContext SUBJECT_PLAYER = new PlayerContext(Type.SUBJECT);
-	public static final LocationContext SUBJECT_LOCATION = new LocationContext(Type.SUBJECT);
-	public static final WorldContext SUBJECT_WORLD = new WorldContext(Type.SUBJECT);
-	// other
-	public static final BlockContext BLOCK = new BlockContext(null, Blocks.AIR);
+	public static final EntityContext ENTITY = new EntityContext();
+	public static final PlayerContext PLAYER = new PlayerContext();
+	public static final LocationContext LOCATION = new LocationContext();
+	public static final WorldContext WORLD = new WorldContext();
+	public static final BlockContext BLOCK = new BlockContext(Blocks.AIR);
 	public static final ConsoleMessageContext CONSOLE_MESSAGE = new ConsoleMessageContext("");
 	public static final ChatMessageContext CHAT_MESSAGE = new ChatMessageContext("");
 	public static final RandomContext RANDOM = new RandomContext();
@@ -51,10 +39,14 @@ public class Contexts {
 				return context;
 		return null;
 	}
-
+	
 	public static <T extends Context> Optional<T> get(T contextIn, Context[] contexts) {
+		return get(contextIn, null, contexts);
+	}
+
+	public static <T extends Context> Optional<T> get(T contextIn, @Nullable Type type, Context[] contexts) {
 		for (Context context : contexts)
-			if (contextIn.equals(context))
+			if (contextIn.equals(context) && (type == null || context.type == type))
 				return Optional.of((T) context);
 		return Optional.empty();
 	}

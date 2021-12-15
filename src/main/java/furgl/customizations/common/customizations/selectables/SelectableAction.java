@@ -1,6 +1,7 @@
 package furgl.customizations.common.customizations.selectables;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +23,6 @@ public abstract class SelectableAction extends Selectable {
 	}
 	
 	/**Activate this action and parses for placeholders if necessary*/
-	public abstract void activate(Context[] configContexts, Context[] eventContexts);
+	public abstract Set<Subject> activate(Context[] configContexts, Context[] eventContexts);
 	
 }

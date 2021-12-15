@@ -1,5 +1,6 @@
 package furgl.customizations.client.subCategories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -8,6 +9,9 @@ import furgl.customizations.client.elements.ConfigElement;
 import furgl.customizations.client.selectors.ConditionSelector;
 import furgl.customizations.common.customizations.Customization;
 import furgl.customizations.common.customizations.conditions.Condition;
+import furgl.customizations.common.customizations.context.Context;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.text.Text;
 
 public class ConditionSubCategory extends SubCategory {
@@ -17,6 +21,15 @@ public class ConditionSubCategory extends SubCategory {
 	public ConditionSubCategory(Customization customization, Condition condition) {
 		super("condition", customization);
 		this.condition = condition;
+	}
+	
+	@Override
+	protected List<AbstractConfigListEntry> addToConfig(ConfigBuilder builder) {
+		// remove unneeded contexts
+		ArrayList<Context> neededContexts = this.getRelatedContexts();
+		this.condition.getContext().removeIf(context -> !neededContexts.contains(context));
+		
+		return super.addToConfig(builder);
 	}
 	
 	@Override

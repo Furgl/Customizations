@@ -128,22 +128,22 @@ public class SelectedEntityContext extends Context {
 	}
 
 	@Override
-	public boolean test(Context... ctxs) {
-		this.selectedEntities = getEntity(ctxs);
+	public boolean test(Context[] configContexts, Context... eventContexts) {
+		this.selectedEntities = getEntity(configContexts, eventContexts);
 		return !this.selectedEntities.isEmpty();
 	}	
 
 	/**Get entity from these contexts*/
-	public Set<Entity> getEntity(Context[] ctxs) {
-		World world = Contexts.get(Contexts.CAUSE_WORLD, ctxs).map(context -> context.getWorld().orElse(null)).orElse(null);
+	public Set<Entity> getEntity(Context[] configContexts, Context... eventContexts) {
+		World world = Contexts.get(Contexts.WORLD, Type.CAUSE, eventContexts).map(context -> context.getWorld().orElse(null)).orElse(null);
 		if (this.type == Selectables.ENTITY_CAUSE)
-			return Contexts.get(Contexts.CAUSE_ENTITY, ctxs).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.ENTITY, Type.CAUSE, eventContexts).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
 		else if (this.type == Selectables.ENTITY_TARGET)
-			return Contexts.get(Contexts.TARGET_ENTITY, ctxs).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
+			return Contexts.get(Contexts.ENTITY, Type.TARGET, eventContexts).map(context -> this.getEntity(world, context.uuid, context.id, null)).orElse(Sets.newHashSet());
 		else if (this.type == Selectables.ENTITY_SPECIFIC)
 			return this.getEntity(world, this.uuid, -1, this.playerName);
 		else if (this.type == Selectables.ENTITY_NEAREST)
-			return this.getNearestEntities(this.entityType, getLocation(this.positionType), this.radius, this.numberOfEntities, null);
+			return this.getNearestEntities(this.entityType, getLocation(this.positionType, eventContexts), this.radius, this.numberOfEntities, null);
 		else if (this.type == Selectables.ENTITY_ALL_PLAYERS && Customizations.server != null)
 			return Sets.newHashSet(Customizations.server.getPlayerManager().getPlayerList());
 		return Sets.newHashSet();
@@ -197,7 +197,7 @@ public class SelectedEntityContext extends Context {
 		if (location != null && location.world != null && location.pos != null) {
 			TypeFilter filter = entityType == null ? PASSTHROUGH_FILTER : entityType;
 			Box box = Box.of(location.pos, radius, radius, radius);
-			return (Set<Entity>) location.world.getEntitiesByType(filter, box, entity -> baseClass.isAssignableFrom(entity.getClass())).stream()
+			return (Set<Entity>) location.world.getEntitiesByType(filter, box, entity -> baseClass == null || baseClass.isAssignableFrom(entity.getClass())).stream()
 					.sorted(new Comparator<Entity>() {
 						@Override
 						public int compare(Entity e1, Entity e2) {
@@ -211,19 +211,19 @@ public class SelectedEntityContext extends Context {
 	}
 
 	@Nullable
-	private Location getLocation(Selectable positionType, Context... contexts) {
+	private Location getLocation(Selectable positionType, Context[] eventContexts) {
 		Vec3d pos = null;
 		World world = null;
 		if (positionType == Selectables.POSITION_CAUSE) {
-			pos = Contexts.get(Contexts.CAUSE_LOCATION, contexts).map(context -> context.location).orElse(null);
-			world = Contexts.get(Contexts.CAUSE_WORLD, contexts).map(context -> context.getWorld().orElse(null)).orElse(null);
+			pos = Contexts.get(Contexts.LOCATION, Type.CAUSE, eventContexts).map(context -> context.location).orElse(null);
+			world = Contexts.get(Contexts.WORLD, Type.CAUSE, eventContexts).map(context -> context.getWorld().orElse(null)).orElse(null);
 		}
 		else if (positionType == Selectables.POSITION_TARGET) {
-			pos = Contexts.get(Contexts.TARGET_LOCATION, contexts).map(context -> context.location).orElse(null);
-			world = Contexts.get(Contexts.TARGET_WORLD, contexts).map(context -> context.getWorld().orElse(null)).orElse(null);
+			pos = Contexts.get(Contexts.LOCATION, Type.CAUSE, eventContexts).map(context -> context.location).orElse(null);
+			world = Contexts.get(Contexts.WORLD, Type.CAUSE, eventContexts).map(context -> context.getWorld().orElse(null)).orElse(null);
 		}
 		else if (positionType == Selectables.POSITION_FIXED) {
-			pos = Contexts.get(Contexts.SELECTED_ENTITY, contexts).map(context -> new Vec3d(context.x, context.y, context.z)).orElse(null);
+			pos = Contexts.get(Contexts.SELECTED_ENTITY, Type.OTHER, eventContexts).map(context -> new Vec3d(context.x, context.y, context.z)).orElse(null);
 			world = ContextHelper.getWorld(this.dimension);
 		}
 		return new Location(world, pos);

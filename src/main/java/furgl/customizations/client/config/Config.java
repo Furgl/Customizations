@@ -8,6 +8,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 
 import furgl.customizations.client.elements.ConfigElement;
 import furgl.customizations.client.elements.DebugModeElement;
+import furgl.customizations.client.elements.DebugVisualsElement;
 import furgl.customizations.client.elements.ShowTipsElement;
 import furgl.customizations.client.lists.CustomizationList;
 import furgl.customizations.common.Customizations;
@@ -69,7 +70,7 @@ public class Config implements ModMenuApi {
 						buf.writeString(FileConfig.writeToString()); // send config 
 						ClientPlayNetworking.send(PacketManager.SEND_CONFIG_TO_SERVER, buf);
 					}
-					else
+					else 
 						FileConfig.writeToFile(false);
 				});
 		// category
@@ -79,6 +80,8 @@ public class Config implements ModMenuApi {
 		category.addEntry(new ShowTipsElement().getOrCreateMainConfigEntry(builder));
 		// debug mode
 		category.addEntry(new DebugModeElement().getOrCreateMainConfigEntry(builder));
+		// debug visuals
+		category.addEntry(new DebugVisualsElement().getOrCreateMainConfigEntry(builder));
 		// tip
 		TextListEntry entry = null;
 		if ((entry = ConfigHelper.addTip(builder, "addCustomization")) != null)

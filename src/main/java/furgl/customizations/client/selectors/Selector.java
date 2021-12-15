@@ -27,6 +27,7 @@ public abstract class Selector<T extends Selectable> extends ConfigElement {
 	protected Function<T, Text> selectionToText;
 	private Consumer<T> saveConsumer;
 	private Iterable<T> selections;
+	private List<ConfigElement> relatedElements;
 
 	protected Selector(String id, Customization customization, ConfigContextHolder contextHolder, T selection, Iterable<T> selections, 
 			Function<String, T> stringToSelection, Function<T, Text> selectionToText, Consumer<T> saveConsumer) {
@@ -48,16 +49,25 @@ public abstract class Selector<T extends Selectable> extends ConfigElement {
 				.setSelections(this.selections)
 				.build();
 		List<AbstractConfigListEntry> list = Lists.newArrayList(this.mainConfigEntry);
-		List<ConfigElement> relatedElements = this.selection.createRelatedElements(this.getCustomization(), this.contextHolder);
-		// remove unneeded contexts
-		ArrayList<Context> contexts = Lists.newArrayList();
-		relatedElements.forEach(element -> contexts.addAll(element.getRelatedContexts()));
-		this.contextHolder.getContext().removeIf(context -> !contexts.contains(context));
 		// add related elements
-		relatedElements.stream()
+		this.getRelatedElements().stream()
 		.map(element -> ((ConfigElement)element).getOrCreateConfigEntries(builder))
 		.forEach(elements -> list.addAll((List<AbstractConfigListEntry>) elements));
 		return list;
+	}
+
+	public List<ConfigElement> getRelatedElements() {
+		if (this.relatedElements == null)
+			this.relatedElements = this.selection.createRelatedElements(this.getCustomization(), this.contextHolder);
+		return this.relatedElements;
+	}
+
+	@Override
+	public ArrayList<Context> getRelatedContexts() {
+		ArrayList<Context> contexts = Lists.newArrayList();
+		for (ConfigElement element : this.getRelatedElements())
+			contexts.addAll(element.getRelatedContexts());
+		return contexts;
 	}
 
 	@Override

@@ -29,8 +29,8 @@ public class SelectableTrigger extends Selectable {
 	}
 
 	/**Trigger with this cause, target, and any extra Contexts*/
-	public void trigger(Object cause, Object target, Context... extras) {
-		CustomizationManager.trigger(this, new Cause(cause), new Target(target), new Other((Object[]) extras));
+	public void trigger(Object cause, @Nullable Object target, Context... extras) {
+		CustomizationManager.trigger(this, new Cause(cause), target == null ? null : new Target(target), extras.length == 0 ? null : new Other((Object[]) extras));
 	}
 
 }

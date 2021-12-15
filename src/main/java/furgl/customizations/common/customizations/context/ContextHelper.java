@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 
 import eu.pb4.placeholders.PlaceholderAPI;
 import furgl.customizations.common.Customizations;
+import furgl.customizations.common.customizations.context.Context.Type;
 import furgl.customizations.common.customizations.context.holders.EventContextHolder;
 import furgl.customizations.common.customizations.context.holders.Subject;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -43,7 +44,7 @@ public class ContextHelper {
 				for (Entry<String, Function<Context[], String>> entry : ctx.getPlaceholders().entrySet())
 					str = str.replaceAll(PLACEHOLDER_CHAR+entry.getKey()+PLACEHOLDER_CHAR, entry.getValue().apply(eventContexts));
 			// replace papi placeholders
-			ServerPlayerEntity player = subject.player != null ? (ServerPlayerEntity)subject.player : Contexts.get(Contexts.CAUSE_PLAYER, eventContexts).map(ctx -> ctx.getPlayer()).orElse(Contexts.get(Contexts.TARGET_PLAYER, eventContexts).map(ctx -> ctx.getPlayer()).orElse(null));
+			ServerPlayerEntity player = subject.player != null ? (ServerPlayerEntity)subject.player : Contexts.get(Contexts.PLAYER, Type.CAUSE, eventContexts).map(ctx -> ctx.getPlayer()).orElse(Contexts.get(Contexts.PLAYER, Type.TARGET, eventContexts).map(ctx -> ctx.getPlayer()).orElse(null));
 			if (player != null)
 				str = PlaceholderAPI.parseText(Text.of(str), player).getString();
 			else

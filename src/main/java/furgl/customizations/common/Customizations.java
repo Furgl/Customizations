@@ -32,6 +32,7 @@ public class Customizations implements ModInitializer, ClientModInitializer {
 		proxy = new CommonProxy();
 		PacketManager.initServerPackets();
 		FileConfig.init();
+		ParticleManager.initServer();
 	}
 	
 	@Override
@@ -39,6 +40,7 @@ public class Customizations implements ModInitializer, ClientModInitializer {
 	public void onInitializeClient() {
 		proxy = new ClientProxy();
 		PacketManager.initClientPackets();
+		ParticleManager.initClient();
 	}
 
 }

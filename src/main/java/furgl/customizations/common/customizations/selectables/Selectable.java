@@ -49,14 +49,14 @@ public class Selectable {
 	public MutableText getTooltip() {
 		MutableText tooltip = new TranslatableText("config." + Customizations.MODID + "." + this.getId() + ".tooltip");
 		// add placeholders to tooltip
-		if (Screen.hasShiftDown()) {
-			String placeholderText = ContextHelper.getPlaceholderText(this.placeholderContextHolders);
-			if (!placeholderText.isEmpty())
-			tooltip.append("\n\n" + Formatting.GOLD + Formatting.UNDERLINE + 
+		String placeholderText = ContextHelper.getPlaceholderText(this.placeholderContextHolders);
+		if (!placeholderText.isEmpty()) {
+			if (Screen.hasShiftDown()) 
+				tooltip.append("\n\n" + Formatting.GOLD + Formatting.UNDERLINE + 
 						new TranslatableText("config." + Customizations.MODID + ".placeholders.tooltip").getString() + "\n" + placeholderText);
+			else
+				tooltip = tooltip.append("\n").append(new TranslatableText("config."+Customizations.MODID+".placeholders.holdShift", Formatting.DARK_GRAY, Formatting.ITALIC));
 		}
-		else
-			tooltip = tooltip.append("\n").append(new TranslatableText("config."+Customizations.MODID+".placeholders.holdShift", Formatting.DARK_GRAY, Formatting.ITALIC));
 		return tooltip;
 	}
 

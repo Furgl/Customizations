@@ -26,14 +26,18 @@ public class PlayerCommandAction extends SelectableAction {
 	}
 
 	@Override
-	public void activate(Context[] configContexts, Context[] eventContexts) {
+	public Set<Subject> activate(Context[] configContexts, Context[] eventContexts) {
+		Set<Subject> subjects = Sets.newHashSet();
 		if (Customizations.server != null) {
 			Set<Entity> entities = Contexts.get(Contexts.SELECTED_ENTITY, eventContexts).map(ctx -> ctx.selectedEntities).orElse(Sets.newHashSet());
 			for (Entity entity : entities)
-				if (entity instanceof ServerPlayerEntity)
+				if (entity instanceof ServerPlayerEntity) {
+					subjects.add(new Subject(entity));
 					Contexts.get(Contexts.COMMAND, eventContexts)
 					.ifPresent(context -> Customizations.server.getCommandManager().execute(entity.getCommandSource(), ContextHelper.parse(context.command, new Subject(entity), eventContexts)));
+				}
 		}
+		return subjects;
 	}
 
 }

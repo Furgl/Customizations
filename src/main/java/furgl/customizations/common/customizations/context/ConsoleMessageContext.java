@@ -19,7 +19,7 @@ public class ConsoleMessageContext extends Context {
 	}
 	
 	@Override
-	public boolean test(Context... eventContexts) {
+	public boolean test(Context[] configContexts, Context... eventContexts) {
 		return true;
 	}	
 	

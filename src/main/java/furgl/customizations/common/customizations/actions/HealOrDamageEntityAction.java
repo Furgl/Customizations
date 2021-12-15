@@ -12,6 +12,7 @@ import furgl.customizations.common.customizations.context.Context;
 import furgl.customizations.common.customizations.context.Contexts;
 import furgl.customizations.common.customizations.context.HealOrDamageContext;
 import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.context.holders.Subject;
 import furgl.customizations.common.customizations.selectables.SelectableAction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -25,11 +26,13 @@ public class HealOrDamageEntityAction extends SelectableAction {
 	}
 
 	@Override
-	public void activate(Context[] configContexts, Context[] eventContexts) {
-		Set<Entity> entities = Contexts.get(Contexts.SELECTED_ENTITY, eventContexts).map(ctx -> ctx.selectedEntities).orElse(Sets.newHashSet());
-		Contexts.get(Contexts.HEAL_OR_DAMAGE_AMOUNT, eventContexts).ifPresent(context -> {
+	public Set<Subject> activate(Context[] configContexts, Context[] eventContexts) {
+		Set<Subject> subjects = Sets.newHashSet();
+		Set<Entity> entities = Contexts.get(Contexts.SELECTED_ENTITY, configContexts).map(ctx -> ctx.selectedEntities).orElse(Sets.newHashSet());
+		Contexts.get(Contexts.HEAL_OR_DAMAGE_AMOUNT, configContexts).ifPresent(context -> {
 			for (Entity entity : entities) {
 				if (entity instanceof LivingEntity) {
+					subjects.add(new Subject(entity));
 					if (((HealOrDamageContext)context).heal > 0)
 						((LivingEntity)entity).heal(((HealOrDamageContext)context).heal);
 					if (((HealOrDamageContext)context).damage > 0)
@@ -37,6 +40,7 @@ public class HealOrDamageEntityAction extends SelectableAction {
 				}
 			}
 		});
+		return subjects;
 	}
 
 }

@@ -23,10 +23,10 @@ public class PositionSelector<T extends Selectable> extends Selector {
 				value -> ((Selectable)value).getName(), 
 				value -> contextHolder.getOrAddContext(Contexts.SELECTED_ENTITY).positionType = (Selectable) value);
 	}
-	
+
 	@Override
 	public ArrayList<Context> getRelatedContexts() {
 		return Lists.newArrayList(Contexts.SELECTED_ENTITY);
 	}
-	
+
 }

@@ -1,6 +1,7 @@
 package furgl.customizations.common.customizations.actions;
 
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,6 +9,7 @@ import com.google.gson.JsonObject;
 import furgl.customizations.common.customizations.context.Context;
 import furgl.customizations.common.customizations.context.Contexts;
 import furgl.customizations.common.customizations.context.holders.ConfigContextHolder;
+import furgl.customizations.common.customizations.context.holders.Subject;
 import furgl.customizations.common.customizations.selectables.SelectableAction;
 import furgl.customizations.common.customizations.selectables.Selectables;
 
@@ -40,8 +42,8 @@ public class Action extends ConfigContextHolder {
 	}
 
 	/**Activate this action*/
-	public void activate(Context... eventContexts) {
-		((SelectableAction) this.type).activate(this.getContext().toArray(new Context[0]), eventContexts);
+	public Set<Subject> activate(Context... eventContexts) {
+		return ((SelectableAction) this.type).activate(this.getContext().toArray(new Context[0]), eventContexts);
 	}
 	
 }

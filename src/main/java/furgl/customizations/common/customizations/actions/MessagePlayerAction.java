@@ -26,14 +26,18 @@ public class MessagePlayerAction extends SelectableAction {
 	}
 
 	@Override
-	public void activate(Context[] configContexts, Context[] eventContexts) {
-		Set<Entity> entities = Contexts.get(Contexts.SELECTED_ENTITY, configContexts).map(ctx -> ctx.getEntity(configContexts)).orElse(Sets.newHashSet());
-		Contexts.get(Contexts.CHAT_MESSAGE, configContexts).ifPresent(context -> {
+	public Set<Subject> activate(Context[] configContexts, Context[] eventContexts) {
+		Set<Subject> subjects = Sets.newHashSet();
+		Set<Entity> entities = Contexts.get(Contexts.SELECTED_ENTITY, null, configContexts).map(ctx -> ctx.getEntity(configContexts)).orElse(Sets.newHashSet());
+		Contexts.get(Contexts.CHAT_MESSAGE, null, configContexts).ifPresent(context -> {
 			for (Entity entity : entities) {
-				if (entity instanceof ServerPlayerEntity)
+				if (entity instanceof ServerPlayerEntity) {
+					subjects.add(new Subject(entity));
 					((ServerPlayerEntity)entity).sendMessage(Text.of(ContextHelper.parse(context.message, new Subject(entity), eventContexts)), false);
+				}
 			}
 		});
+		return subjects;
 	}
 
 }

@@ -50,6 +50,7 @@ public class FileConfig {
 	
 	public static boolean showTips = true;
 	public static DebugMode debugMode = DebugMode.OFF;
+	public static boolean debugVisuals = false;
 
 	public static void init() {
 		try {
@@ -92,6 +93,9 @@ public class FileConfig {
 		
 		element = parser.get("Debug Mode");
 		debugMode = element == null ? DebugMode.OFF : DebugMode.getDebugMode(element.getAsString());
+		
+		element = parser.get("Debug Visuals");
+		debugVisuals = element == null ? false : element.getAsBoolean();
 
 		CustomizationManager.clearCustomizations();
 		for (Entry<String, JsonElement> entry : parser.entrySet()) {
@@ -138,6 +142,8 @@ public class FileConfig {
 		obj.addProperty("Show Tips", writeDefaults ? true : showTips);
 		
 		obj.addProperty("Debug Mode", writeDefaults ? DebugMode.OFF.name() : debugMode.name());
+		
+		obj.addProperty("Debug Visuals", writeDefaults ? false : debugVisuals);
 		
 		ArrayList<Customization> customizations = CustomizationManager.getAllCustomizations();
 		for (int i=0; i<customizations.size(); ++i) 

@@ -1,5 +1,6 @@
 package furgl.customizations.common.customizations.context;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -19,6 +20,11 @@ public class BlockContext extends Context {
 		this.block = block;
 	}
 	
+	public BlockContext(Block block) {
+		this();
+		this.block = block;
+	}
+	
 	public BlockContext() {
 		this((Type) null);
 	}
@@ -33,8 +39,8 @@ public class BlockContext extends Context {
 	}
 
 	@Override
-	public boolean test(Context... eventContexts) {
-		return this.block == Blocks.AIR || Contexts.get(Contexts.BLOCK, eventContexts).map(ctx -> ctx.block == this.block).orElse(false);
+	public boolean test(Context[] configContexts, Context... eventContexts) {
+		return this.block == Blocks.AIR || Contexts.get(Contexts.BLOCK, this.type, configContexts).map(ctx -> ctx.block == this.block).orElse(false);
 	}
 	
 	@Override

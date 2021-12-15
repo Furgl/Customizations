@@ -87,7 +87,7 @@ public abstract class ConfigElement {
 		return false;
 	}
 	
-	/**Get contexts that are used in this element*/
+	/**Get contexts that are used in this element (and children/related elements)*/
 	public ArrayList<Context> getRelatedContexts() {
 		return Lists.newArrayList();
 	}
